@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="ProcessPipeline.NET Ruleset" Description="Ruleset for ProcessPipeline.NET." ToolsVersion="15.0">
+  <Include Path="MinimumRecommendedRules.ruleset" Action="Default" />
+  <Include Path="SecurityRules.ruleset" Action="Default" />
+  <Include Path="PublicAssembly.ruleset" Action="Default" />
+  <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+    <Rule Id="SA1652" Action="None" />
+  </Rules>
+</RuleSet>
