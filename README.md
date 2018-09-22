@@ -45,4 +45,66 @@ Runtimes:
 
 # Examples
 
-See samples (not yet) for more examples. 
+See [ProcessPipeline.Example](src/ProcessPipeline.Example/) (not yet) for more examples.
+
+## Basic
+
+```cs
+var si = new ChildProcessStartInfo("cmd", "/C", "echo", "foo")
+{
+    StdOutputRedirection = OutputRedirection.OutputPipe,
+};
+
+using (var p = ChildProcess.Start(si))
+{
+    using (var sr = new StreamReader(p.StandardOutput))
+    {
+        // "foo"
+        Console.Write(await sr.ReadToEndAsync());
+    }
+    p.WaitForExit();
+    // ExitCode: 0
+    Console.WriteLine("ExitCode: {0}", p.ExitCode);
+}
+```
+
+## Redirection to File
+
+```cs
+var si = new ChildProcessStartInfo("cmd", "/C", "set")
+{
+    StdOutputRedirection = OutputRedirection.File,
+    StdOutputFile = "env.txt"
+};
+
+using (var p = ChildProcess.Start(si))
+{
+    p.WaitForExit();
+}
+
+// ALLUSERSPROFILE=C:\ProgramData
+// ...
+Console.WriteLine(File.ReadAllText("env.txt"));
+```
+
+## Process Pipeline
+
+```cs
+var si = new ProcessPipelineStartInfo()
+{
+    StdOutputRedirection = OutputRedirection.File,
+    StdOutputFile = "env.txt"
+};
+si.Add("cmd", "/C", "set");
+si.Add("findstr", "PROCESSOR");
+
+using (var p = ProcessPipeline.Start(si))
+{
+    p.WaitForExit();
+}
+
+// NUMBER_OF_PROCESSORS=16
+// PROCESSOR_ARCHITECTURE = AMD64
+// ...
+Console.WriteLine(File.ReadAllText("env.txt"));
+```
