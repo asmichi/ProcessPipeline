@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>Asmichi.ProcessPipeline</id>
-    <version>0.1.0</version>
+    <version>$version$</version>
     <authors>asmichi</authors>
     <owners>asmichi</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
