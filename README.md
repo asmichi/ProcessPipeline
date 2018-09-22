@@ -1,7 +1,7 @@
 # Asmichi.ProcessPipeline
 A .NET library for creating child processes and child process pipelines. Easier, less error-prone, more flexible than `System.Diagnostic.Process`.
 
-This library can be obtained via NuGet (URL)(TBD).
+This library can be obtained via [NuGet](https://www.nuget.org/packages/Asmichi.ProcessPipeline/).
 
 ## Comparison with `System.Diagnostic.Process`
 
@@ -21,7 +21,7 @@ This library can be obtained via NuGet (URL)(TBD).
 
 ## Features Not Implemented Yet
 
-- Async methods. (Not implemented yet.)
+- Async methods.
 - Custom environment variables.
 
 # License
