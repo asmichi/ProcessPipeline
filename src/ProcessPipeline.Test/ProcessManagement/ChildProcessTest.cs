@@ -225,8 +225,8 @@ namespace Asmichi.Utilities.ProcessManagement
 
                 // StdOutputHandle StdErrorHandle
                 {
-                    using (var fsOut = new FileStream(outFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete))
-                    using (var fsErr = new FileStream(errFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                    using (var fsOut = File.Create(outFile))
+                    using (var fsErr = File.Create(errFile))
                     {
                         // File
                         var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoOutAndError")
