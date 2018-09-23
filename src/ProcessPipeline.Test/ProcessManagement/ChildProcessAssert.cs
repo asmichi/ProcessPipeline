@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -46,6 +47,39 @@ namespace Asmichi.Utilities.ProcessManagement
             sut.StandardInput.Close();
             sut.WaitForExit();
             Assert.True(sut.WaitForExit(0));
+        }
+
+        // Input: EchoBack process
+        public static async Task WaitForExitAsyncTimesOut(IChildProcess sut)
+        {
+            Assert.False(await sut.WaitForExitAsync(0));
+            Assert.False(await sut.WaitForExitAsync(1));
+
+            sut.StandardInput.Close();
+            Assert.True(await sut.WaitForExitAsync(1000));
+        }
+
+        // Input: EchoBack process
+        public static async Task CanCancelWaitForExitAsync(IChildProcess sut)
+        {
+            Assert.False(await sut.WaitForExitAsync(0));
+
+            using (var cts = new CancellationTokenSource())
+            {
+                var t = sut.WaitForExitAsync(1000, cts.Token);
+                cts.Cancel();
+                Assert.Throws<TaskCanceledException>(() => t.GetAwaiter().GetResult());
+            }
+
+            sut.StandardInput.Close();
+            Thread.Sleep(100);
+
+            // If the process has already exited, returns true instead of returning CanceledTask.
+            using (var cts = new CancellationTokenSource())
+            {
+                cts.Cancel();
+                Assert.True(await sut.WaitForExitAsync(0, cts.Token));
+            }
         }
 
         // Input: EchoOutAndError process

@@ -119,6 +119,32 @@ namespace Asmichi.Utilities.ProcessManagement
         [Fact]
         public void WaitForExitTimesOut()
         {
+            using (var sut = CreateForWaitForExitTest())
+            {
+                ChildProcessAssert.WaitForExitTimesOut(sut);
+            }
+        }
+
+        [Fact]
+        public async Task WaitForExitAsyncTimesOut()
+        {
+            using (var sut = CreateForWaitForExitTest())
+            {
+                await ChildProcessAssert.WaitForExitAsyncTimesOut(sut);
+            }
+        }
+
+        [Fact]
+        public async Task CanCancelWaitForExitAsync()
+        {
+            using (var sut = CreateForWaitForExitTest())
+            {
+                await ChildProcessAssert.CanCancelWaitForExitAsync(sut);
+            }
+        }
+
+        private static ProcessPipeline CreateForWaitForExitTest()
+        {
             var si = new ProcessPipelineStartInfo()
             {
                 StdInputRedirection = InputRedirection.InputPipe,
@@ -128,10 +154,7 @@ namespace Asmichi.Utilities.ProcessManagement
             si.Add(TestUtil.TestChildPath, "EchoBack");
             si.Add(TestUtil.TestChildPath, "EchoBack");
 
-            using (var sut = ProcessPipeline.Start(si))
-            {
-                ChildProcessAssert.WaitForExitTimesOut(sut);
-            }
+            return ProcessPipeline.Start(si);
         }
 
         [Fact]

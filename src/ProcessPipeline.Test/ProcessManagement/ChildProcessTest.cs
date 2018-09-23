@@ -83,16 +83,38 @@ namespace Asmichi.Utilities.ProcessManagement
         [Fact]
         public void WaitForExitTimesOut()
         {
+            using (var sut = CreateForWaitForExitTest())
+            {
+                ChildProcessAssert.WaitForExitTimesOut(sut);
+            }
+        }
+
+        [Fact]
+        public async Task WaitForExitAsyncTimesOut()
+        {
+            using (var sut = CreateForWaitForExitTest())
+            {
+                await ChildProcessAssert.WaitForExitAsyncTimesOut(sut);
+            }
+        }
+
+        [Fact]
+        public async Task CanCancelWaitForExitAsync()
+        {
+            using (var sut = CreateForWaitForExitTest())
+            {
+                await ChildProcessAssert.CanCancelWaitForExitAsync(sut);
+            }
+        }
+
+        private static ChildProcess CreateForWaitForExitTest()
+        {
             var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoBack")
             {
                 StdInputRedirection = InputRedirection.InputPipe,
                 StdOutputRedirection = OutputRedirection.NullDevice,
             };
-
-            using (var sut = ChildProcess.Start(si))
-            {
-                ChildProcessAssert.WaitForExitTimesOut(sut);
-            }
+            return ChildProcess.Start(si);
         }
 
         [Fact]

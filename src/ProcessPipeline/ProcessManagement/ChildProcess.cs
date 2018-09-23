@@ -7,12 +7,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using Asmichi.Utilities.Interop;
 using Asmichi.Utilities.Interop.Windows;
+using Asmichi.Utilities.Utilities;
 using Microsoft.Win32.SafeHandles;
 
 namespace Asmichi.Utilities.ProcessManagement
 {
     /// <summary>
     /// Represents a child process created.
+    /// Static members are thread-safe.
+    /// All instance members are not thread-safe and must not be called simultaneously by multiple threads.
     /// </summary>
     public sealed partial class ChildProcess : IDisposable, IChildProcess
     {
@@ -21,9 +24,9 @@ namespace Asmichi.Utilities.ProcessManagement
         private readonly Stream _standardInput;
         private readonly Stream _standardOutput;
         private readonly Stream _standardError;
-        private int _exitCode;
         private bool _isDisposed;
         private bool _hasExitCode;
+        private int _exitCode;
 
         private ChildProcess(
             SafeProcessHandle processHandle,
@@ -81,19 +84,22 @@ namespace Asmichi.Utilities.ProcessManagement
         /// <summary>
         /// Waits indefinitely for the process to exit.
         /// </summary>
-        public void WaitForExit()
-        {
-            WaitForExit(Timeout.Infinite);
-        }
+        public void WaitForExit() => WaitForExit(Timeout.Infinite);
 
         /// <summary>
         /// Waits <paramref name="millisecondsTimeout"/> milliseconds for the process to exit.
         /// </summary>
         /// <param name="millisecondsTimeout">The amount of time in milliseconds to wait for the process to exit. <see cref="Timeout.Infinite"/> means infinite amount of time.</param>
-        /// <returns>true if the process has exited. Otherwise false</returns>
+        /// <returns>true if the process has exited. Otherwise false.</returns>
         public bool WaitForExit(int millisecondsTimeout)
         {
+            ArgumentValidationUtil.CheckTimeOutRange(millisecondsTimeout);
             CheckNotDisposed();
+
+            if (_hasExitCode)
+            {
+                return true;
+            }
 
             if (!_waitHandle.WaitOne(millisecondsTimeout))
             {
@@ -102,6 +108,48 @@ namespace Asmichi.Utilities.ProcessManagement
 
             DangerousRetrieveExitCode();
             return true;
+        }
+
+        /// <summary>
+        /// Asynchronously waits indefinitely for the process to exit.
+        /// </summary>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to cancel the wait operation.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous wait operation.</returns>
+        public Task WaitForExitAsync(CancellationToken cancellationToken = default) =>
+            WaitForExitAsync(Timeout.Infinite, cancellationToken);
+
+        /// <summary>
+        /// Asynchronously waits <paramref name="millisecondsTimeout"/> milliseconds for the process to exit.
+        /// </summary>
+        /// <param name="millisecondsTimeout">The amount of time in milliseconds to wait for the process to exit. <see cref="Timeout.Infinite"/> means infinite amount of time.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to cancel the wait operation.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous wait operation. true if the process has exited. Otherwise false.</returns>
+        public Task<bool> WaitForExitAsync(int millisecondsTimeout, CancellationToken cancellationToken = default)
+        {
+            ArgumentValidationUtil.CheckTimeOutRange(millisecondsTimeout);
+            CheckNotDisposed();
+
+            if (_hasExitCode)
+            {
+                return CompletedBoolTask.True;
+            }
+
+            // Synchronous path: the process has already exited.
+            if (_waitHandle.WaitOne(0))
+            {
+                DangerousRetrieveExitCode();
+                return CompletedBoolTask.True;
+            }
+
+            // Synchronous path: already canceled.
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return Task.FromCanceled<bool>(cancellationToken);
+            }
+
+            // Start an asynchronous wait operation.
+            var operation = new WaitAsyncOperation();
+            return operation.StartAsync(_waitHandle, millisecondsTimeout, cancellationToken);
         }
 
         /// <summary>

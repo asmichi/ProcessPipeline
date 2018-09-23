@@ -5,7 +5,8 @@ This library can be obtained via [NuGet](https://www.nuget.org/packages/Asmichi.
 
 ## Comparison with `System.Diagnostics.Process`
 
-- It concentrates on creating a child process and obtaining its output. It cannot query status of a process.
+- Concentrates on creating a child process and obtaining its output.
+    - Cannot query status of a process.
 - Can redirect stdin, stdout and stderr differently.
 - More destinations of redirection:
     - NUL
@@ -17,11 +18,10 @@ This library can be obtained via [NuGet](https://www.nuget.org/packages/Asmichi.
     - stdout to the current stdout
     - stderr to the current stderr
 - Pipes are asynchronous; asynchronous reads and writes will be handled by IO completion ports.
-- Async methods. (Not implemented yet.)
+- `WaitForExitAsync`.
 
 ## Features Not Implemented Yet
 
-- Async methods.
 - Custom environment variables.
 
 # License
@@ -62,7 +62,7 @@ using (var p = ChildProcess.Start(si))
         // "foo"
         Console.Write(await sr.ReadToEndAsync());
     }
-    p.WaitForExit();
+    await p.WaitForExitAsync();
     // ExitCode: 0
     Console.WriteLine("ExitCode: {0}", p.ExitCode);
 }
@@ -79,7 +79,7 @@ var si = new ChildProcessStartInfo("cmd", "/C", "set")
 
 using (var p = ChildProcess.Start(si))
 {
-    p.WaitForExit();
+    await p.WaitForExitAsync();
 }
 
 // ALLUSERSPROFILE=C:\ProgramData
@@ -100,7 +100,7 @@ si.Add("findstr", "PROCESSOR");
 
 using (var p = ProcessPipeline.Start(si))
 {
-    p.WaitForExit();
+    await p.WaitForExitAsync();
 }
 
 // NUMBER_OF_PROCESSORS=16

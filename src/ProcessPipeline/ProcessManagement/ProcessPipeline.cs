@@ -2,19 +2,26 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using Asmichi.Utilities.Interop;
 using Asmichi.Utilities.Interop.Windows;
+using Asmichi.Utilities.Utilities;
 using Microsoft.Win32.SafeHandles;
 
 namespace Asmichi.Utilities.ProcessManagement
 {
     /// <summary>
     /// Represents a pipeline of processes created.
+    /// Static members are thread-safe.
+    /// All instance members are not thread-safe and must not be called simultaneously by multiple threads.
     /// </summary>
     public sealed partial class ProcessPipeline : IDisposable, IChildProcess
     {
+        private static readonly Func<Task, object, bool> CachedAreAllWaitSuccessfulDelegate = AreAllWaitSuccessful;
+
         private readonly ProcessEntry[] _entries;
         private readonly WaitHandle[] _waitHandles;
         private readonly Stream _standardInput;
@@ -48,6 +55,7 @@ namespace Asmichi.Utilities.ProcessManagement
                 if (validProcessCount == 0)
                 {
                     this._waitHandles = Array.Empty<WaitHandle>();
+                    this._hasExitCodes = true;
                 }
                 else
                 {
@@ -125,15 +133,18 @@ namespace Asmichi.Utilities.ProcessManagement
         /// Waits <paramref name="millisecondsTimeout"/> milliseconds for all the processes in the pipeline to exit.
         /// </summary>
         /// <param name="millisecondsTimeout">The amount of time in milliseconds to wait for the processes to exit. <see cref="Timeout.Infinite"/> means infinite amount of time.</param>
-        /// <returns>true if the process has exited. Otherwise false</returns>
+        /// <returns>true if the processes have exited. Otherwise false.</returns>
         public bool WaitForExit(int millisecondsTimeout)
         {
+            ArgumentValidationUtil.CheckTimeOutRange(millisecondsTimeout);
             CheckNotDisposed();
 
-            if (_waitHandles.Length == 0)
+            if (_hasExitCodes)
             {
                 return true;
             }
+
+            Debug.Assert(_waitHandles.Length != 0);
 
             if (!WaitHandle.WaitAll(_waitHandles, millisecondsTimeout))
             {
@@ -141,6 +152,91 @@ namespace Asmichi.Utilities.ProcessManagement
             }
 
             DangerousRetrieveExitCodes();
+            return true;
+        }
+
+        /// <summary>
+        /// Asynchronously waits indefinitely for all the processes in the pipeline to exit.
+        /// </summary>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to cancel the wait operation.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous wait operation.</returns>
+        public Task WaitForExitAsync(CancellationToken cancellationToken = default) =>
+            WaitForExitAsync(Timeout.Infinite, cancellationToken);
+
+        /// <summary>
+        /// Asynchronously waits <paramref name="millisecondsTimeout"/> milliseconds for all the processes in the pipeline to exit.
+        /// </summary>
+        /// <param name="millisecondsTimeout">The amount of time in milliseconds to wait for the processes to exit. <see cref="Timeout.Infinite"/> means infinite amount of time.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to cancel the wait operation.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous wait operation. true if the processes have exited. Otherwise false.</returns>
+        public Task<bool> WaitForExitAsync(int millisecondsTimeout, CancellationToken cancellationToken = default)
+        {
+            ArgumentValidationUtil.CheckTimeOutRange(millisecondsTimeout);
+            CheckNotDisposed();
+
+            if (_hasExitCodes)
+            {
+                return CompletedBoolTask.True;
+            }
+
+            Debug.Assert(_waitHandles.Length != 0);
+
+            // Collect unsignaled handles.
+            int unsignaledHandleCount = 0;
+            Span<bool> signaled = stackalloc bool[_waitHandles.Length];
+            for (int i = 0; i < _waitHandles.Length; i++)
+            {
+                if (_waitHandles[i].WaitOne(0))
+                {
+                    signaled[i] = true;
+                }
+                else
+                {
+                    signaled[i] = false;
+                    unsignaledHandleCount++;
+                }
+            }
+
+            // Synchronous path: all the process have already exited.
+            if (unsignaledHandleCount == 0)
+            {
+                DangerousRetrieveExitCodes();
+                return CompletedBoolTask.True;
+            }
+
+            // Synchronous path: already canceled.
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return Task.FromCanceled<bool>(cancellationToken);
+            }
+
+            // Start asynchronous wait operations.
+            var waitTasks = new Task<bool>[unsignaledHandleCount];
+            var waitTaskIndex = 0;
+
+            for (int i = 0; i < _waitHandles.Length; i++)
+            {
+                if (!signaled[i])
+                {
+                    waitTasks[waitTaskIndex++] = new WaitAsyncOperation().StartAsync(_waitHandles[i], millisecondsTimeout, cancellationToken);
+                }
+            }
+
+            return Task.WhenAll(waitTasks).ContinueWith(CachedAreAllWaitSuccessfulDelegate, waitTasks, cancellationToken);
+        }
+
+        private static bool AreAllWaitSuccessful(Task prevTask, object state)
+        {
+            var waitTasks = (Task<bool>[])state;
+
+            for (int i = 0; i < waitTasks.Length; i++)
+            {
+                if (!waitTasks[i].Result)
+                {
+                    return false;
+                }
+            }
+
             return true;
         }
 
