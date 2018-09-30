@@ -74,7 +74,7 @@ namespace Asmichi.Utilities.ProcessManagement
         AppendToFile,
 
         /// <summary>
-        /// Redirected to a file handle. The corresponding StdInputHandle property must be set.
+        /// Redirected to a file handle. The corresponding StdOutputtHandle or StdErrorHandle property must be set.
         /// </summary>
         Handle,
 
