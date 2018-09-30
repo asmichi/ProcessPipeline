@@ -237,6 +237,52 @@ namespace Asmichi.Utilities.ProcessManagement
         }
 
         [Fact]
+        public void CanRedirectToSameFile()
+        {
+            using (var tmp = new TemporaryDirectory())
+            {
+                var outFile = Path.Combine(tmp.Location, "out");
+
+                // StdOutputFile StdErrorFile
+                {
+                    // File
+                    var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoOutAndError")
+                    {
+                        StdOutputRedirection = OutputRedirection.File,
+                        StdOutputFile = outFile,
+                        StdErrorRedirection = OutputRedirection.File,
+                        StdErrorFile = outFile,
+                    };
+
+                    using (var sut = ChildProcess.Start(si))
+                    {
+                        sut.WaitForExit();
+                        Assert.True(sut.IsSuccessful);
+                    }
+
+                    Assert.Equal("TestChild.OutTestChild.Error", File.ReadAllText(outFile));
+
+                    // AppendToFile
+                    si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoOutAndError")
+                    {
+                        StdOutputRedirection = OutputRedirection.AppendToFile,
+                        StdOutputFile = outFile,
+                        StdErrorRedirection = OutputRedirection.AppendToFile,
+                        StdErrorFile = outFile,
+                    };
+
+                    using (var sut = ChildProcess.Start(si))
+                    {
+                        sut.WaitForExit();
+                        Assert.True(sut.IsSuccessful);
+                    }
+
+                    Assert.Equal("TestChild.OutTestChild.ErrorTestChild.OutTestChild.Error", File.ReadAllText(outFile));
+                }
+            }
+        }
+
+        [Fact]
         public void RedirectionToHandle()
         {
             using (var tmp = new TemporaryDirectory())

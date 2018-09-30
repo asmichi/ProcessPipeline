@@ -1,7 +1,7 @@
 ﻿// Copyright 2018 @asmichi (at github). Licensed under the MIT License. See LICENCE in the project root for details.
 
 using System;
-using System.ComponentModel;
+using System.IO;
 using Asmichi.Utilities.Interop;
 using Microsoft.Win32.SafeHandles;
 
@@ -19,6 +19,7 @@ namespace Asmichi.Utilities.ProcessManagement
         /// </remarks>
         /// <param name="startInfo"><see cref="ProcessPipelineStartInfo"/></param>
         /// <returns>The started process pipeline.</returns>
+        /// <exception cref="IOException">Failed to open a specified file.</exception>
         public static ProcessPipeline Start(ProcessPipelineStartInfo startInfo)
         {
             startInfo = startInfo ?? throw new ArgumentNullException(nameof(startInfo));

@@ -214,7 +214,7 @@ namespace Asmichi.Utilities.ProcessManagement
         }
 
         [Fact]
-        public async Task TestProcessPipelineItemFlags()
+        public async Task RedirectBothOutput()
         {
             var si = new ProcessPipelineStartInfo()
             {

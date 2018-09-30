@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -22,6 +23,7 @@ namespace Asmichi.Utilities.ProcessManagement
         /// </summary>
         /// <param name="startInfo"><see cref="ChildProcessStartInfo"/></param>
         /// <returns>The started process.</returns>
+        /// <exception cref="IOException">Failed to open a specified file.</exception>
         /// <exception cref="ProcessCreationFailedException">Process creation failed.</exception>
         public static ChildProcess Start(ChildProcessStartInfo startInfo)
         {

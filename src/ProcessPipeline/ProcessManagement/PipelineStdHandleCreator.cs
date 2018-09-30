@@ -42,7 +42,7 @@ namespace Asmichi.Utilities.ProcessManagement
             {
                 throw new ArgumentNullException(nameof(ChildProcessStartInfo.StdOutputHandle));
             }
-            if ((stdOutputRedirection == OutputRedirection.File || stdOutputRedirection == OutputRedirection.AppendToFile) && stdOutputFile == null)
+            if (IsFileRedirection(stdOutputRedirection) && stdOutputFile == null)
             {
                 throw new ArgumentNullException(nameof(ChildProcessStartInfo.StdOutputFile));
             }
@@ -50,9 +50,17 @@ namespace Asmichi.Utilities.ProcessManagement
             {
                 throw new ArgumentNullException(nameof(ChildProcessStartInfo.StdErrorHandle));
             }
-            if ((stdErrorRedirection == OutputRedirection.File || stdErrorRedirection == OutputRedirection.AppendToFile) && stdErrorFile == null)
+            if (IsFileRedirection(stdErrorRedirection) && stdErrorFile == null)
             {
                 throw new ArgumentNullException(nameof(ChildProcessStartInfo.StdErrorFile));
+            }
+
+            bool redirectingToSameFile = IsFileRedirection(stdOutputRedirection) && IsFileRedirection(stdErrorRedirection) && stdOutputFile == stdErrorFile;
+            if (redirectingToSameFile && stdErrorRedirection != stdOutputRedirection)
+            {
+                throw new ArgumentException(
+                    "StdOutputRedirection and StdErrorRedirection must be the same value when both stdout and stderr redirect to the same file.",
+                    nameof(ChildProcessStartInfo.StdErrorRedirection));
             }
 
             var inputWritePipe = default(SafeFileHandle);
@@ -97,12 +105,19 @@ namespace Asmichi.Utilities.ProcessManagement
                     _outputWritePipe,
                     _errorWritePipe);
 
-                this.PipelineStdErr = ChooseOutput(
-                    stdErrorRedirection,
-                    stdErrorFile,
-                    stdErrorHandle,
-                    _outputWritePipe,
-                    _errorWritePipe);
+                if (redirectingToSameFile)
+                {
+                    this.PipelineStdErr = this.PipelineStdOut;
+                }
+                else
+                {
+                    this.PipelineStdErr = ChooseOutput(
+                        stdErrorRedirection,
+                        stdErrorFile,
+                        stdErrorHandle,
+                        _outputWritePipe,
+                        _errorWritePipe);
+                }
             }
             catch
             {
@@ -262,5 +277,8 @@ namespace Asmichi.Utilities.ProcessManagement
                 _objectsToDispose = new List<IDisposable>(5);
             }
         }
+
+        private static bool IsFileRedirection(OutputRedirection redirection) =>
+            redirection == OutputRedirection.File || redirection == OutputRedirection.AppendToFile;
     }
 }
