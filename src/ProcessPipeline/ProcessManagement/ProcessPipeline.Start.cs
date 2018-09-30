@@ -73,6 +73,7 @@ namespace Asmichi.Utilities.ProcessManagement
                             entries[index].ProcessHandle = ChildProcess.Start(
                                 fileName: item.FileName,
                                 arguments: item.Arguments,
+                                workingDirectory: item.WorkingDirectory,
                                 environmentVariables: item.EnvironmentVariables,
                                 stdIn: stdInput,
                                 stdOut: stdOutput,

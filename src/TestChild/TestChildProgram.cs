@@ -29,6 +29,8 @@ namespace Asmichi.Utilities
                     return CommandSleep(args);
                 case "DumpEnvironmentVariables":
                     return CommandDumpEnvironmentVariables();
+                case "EchoWorkingDirectory":
+                    return CommandEchoWorkingDirectory();
                 default:
                     Console.WriteLine("Unknown command: {0}", command);
                     return 1;
@@ -71,6 +73,12 @@ namespace Asmichi.Utilities
                 Console.Write("{0}={1}\0", key, (string)evars[key]);
             }
 
+            return 0;
+        }
+
+        private static int CommandEchoWorkingDirectory()
+        {
+            Console.Write(Environment.CurrentDirectory);
             return 0;
         }
     }

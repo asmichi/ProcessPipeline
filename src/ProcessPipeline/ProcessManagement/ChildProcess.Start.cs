@@ -43,6 +43,7 @@ namespace Asmichi.Utilities.ProcessManagement
                 var processHandle = Start(
                     fileName: startInfo.FileName,
                     arguments: startInfo.Arguments,
+                    workingDirectory: startInfo.WorkingDirectory,
                     environmentVariables: startInfo.EnvironmentVariables,
                     stdIn: stdHandles.PipelineStdIn,
                     stdOut: stdHandles.PipelineStdOut,
@@ -65,6 +66,7 @@ namespace Asmichi.Utilities.ProcessManagement
         internal static unsafe SafeProcessHandle Start(
             string fileName,
             IReadOnlyCollection<string> arguments,
+            string workingDirectory,
             IReadOnlyCollection<(string name, string value)> environmentVariables,
             SafeHandle stdIn,
             SafeHandle stdOut,
@@ -100,7 +102,7 @@ namespace Asmichi.Utilities.ProcessManagement
                                 commandLine,
                                 creationFlags,
                                 environmentBlock,
-                                null,
+                                workingDirectory,
                                 childStdInput,
                                 childStdOutput,
                                 childStdError,

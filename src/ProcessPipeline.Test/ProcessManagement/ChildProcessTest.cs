@@ -360,5 +360,26 @@ namespace Asmichi.Utilities.ProcessManagement
                 Assert.Equal(new[] { "A=a", "BB=bb" }, output.Split(new char[] { '\0' }, StringSplitOptions.RemoveEmptyEntries));
             }
         }
+
+        [Fact]
+        public void CanSetWorkingDirectory()
+        {
+            using (var tmp = new TemporaryDirectory())
+            {
+                var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoWorkingDirectory")
+                {
+                    StdOutputRedirection = OutputRedirection.OutputPipe,
+                    WorkingDirectory = tmp.Location,
+                };
+
+                using (var sut = ChildProcess.Start(si))
+                using (var sr = new StreamReader(sut.StandardOutput))
+                {
+                    var output = sr.ReadToEnd();
+                    sut.WaitForExit();
+                    Assert.Equal(tmp.Location, output);
+                }
+            }
+        }
     }
 }

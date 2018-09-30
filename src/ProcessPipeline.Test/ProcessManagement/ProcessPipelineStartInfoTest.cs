@@ -29,6 +29,7 @@ namespace Asmichi.Utilities.ProcessManagement
 
             Assert.Null(sut.FileName);
             Assert.Null(sut.Arguments);
+            Assert.Null(sut.WorkingDirectory);
             Assert.Null(sut.EnvironmentVariables);
             Assert.Equal(ProcessPipelineItemFlags.RedirectStandardOutput, sut.Flags);
         }

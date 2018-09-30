@@ -86,6 +86,12 @@ namespace Asmichi.Utilities.ProcessManagement
         public IReadOnlyCollection<string> Arguments { get; set; }
 
         /// <summary>
+        /// The working directory of the child process.
+        /// If it is null, the child process inherits the working directory of the current process.
+        /// </summary>
+        public string WorkingDirectory { get; set; }
+
+        /// <summary>
         /// The list of the environment variables that apply to the child process.
         /// If it is null, the child process inherits the environment variables of the current process.
         /// </summary>
