@@ -38,8 +38,11 @@
 
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 
-  <PropertyGroup>
-    <PostBuildEvent>xcopy /y /q $(BinDir)TestChild\AnyCPU\$(ConfigurationName)\net471\TestChild.exe $(TargetDir) &gt; NUL</PostBuildEvent>
-  </PropertyGroup>
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <TestChildBin Include="$(BinDir)TestChild\AnyCPU\$(ConfigurationName)\netcoreapp2.1\TestChild.*"/>
+    </ItemGroup>
+    <Copy SourceFiles="@(TestChildBin)" DestinationFolder="$(TargetDir)"/>
+  </Target>
 
 </Project>

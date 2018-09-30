@@ -6,7 +6,7 @@
     <OutputType>Exe</OutputType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>Asmichi.Utilities</RootNamespace>
-    <TargetFrameworks>net471</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>

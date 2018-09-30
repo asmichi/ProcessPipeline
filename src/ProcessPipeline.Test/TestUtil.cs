@@ -7,7 +7,8 @@ namespace Asmichi.Utilities
 {
     internal static class TestUtil
     {
-        public static string TestChildPath => Path.Combine(Environment.CurrentDirectory, "TestChild.exe");
+        public static string DotnetCommand => "dotnet";
+        public static string TestChildPath => Path.Combine(Environment.CurrentDirectory, "TestChild.dll");
     }
 
     internal sealed class TemporaryDirectory : IDisposable

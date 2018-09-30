@@ -16,7 +16,7 @@ namespace Asmichi.Utilities.ProcessManagement
         [Fact]
         public void ChildProcessWaitForAsyncIsTrulyAsynchronous()
         {
-            var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "Sleep", "1000")
+            var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "Sleep", "1000")
             {
                 StdOutputRedirection = OutputRedirection.NullDevice,
                 StdErrorRedirection = OutputRedirection.NullDevice,
@@ -25,6 +25,8 @@ namespace Asmichi.Utilities.ProcessManagement
             using (var sut = ChildProcess.Start(si))
             {
                 WaitForAsyncIsTrulyAsynchronous(sut);
+                sut.WaitForExit();
+                Assert.True(sut.IsSuccessful);
             }
         }
 
@@ -36,12 +38,14 @@ namespace Asmichi.Utilities.ProcessManagement
                 StdOutputRedirection = OutputRedirection.NullDevice,
                 StdErrorRedirection = OutputRedirection.NullDevice,
             };
-            si.Add(TestUtil.TestChildPath, "Sleep", "1000");
-            si.Add(TestUtil.TestChildPath, "Sleep", "1000");
+            si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "Sleep", "1000");
+            si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "Sleep", "1000");
 
             using (var sut = ProcessPipeline.Start(si))
             {
                 WaitForAsyncIsTrulyAsynchronous(sut);
+                sut.WaitForExit();
+                Assert.True(sut.IsSuccessful);
             }
         }
 

@@ -14,7 +14,7 @@ namespace Asmichi.Utilities.ProcessManagement
         [Fact]
         public void CanCreateChildProcess()
         {
-            var si = new ChildProcessStartInfo(TestUtil.TestChildPath)
+            var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath)
             {
                 StdOutputRedirection = OutputRedirection.OutputPipe,
             };
@@ -37,7 +37,7 @@ namespace Asmichi.Utilities.ProcessManagement
         public void CanObtainExitCode()
         {
             {
-                var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "ExitCode", "0");
+                var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "ExitCode", "0");
 
                 using (var sut = ChildProcess.Start(si))
                 {
@@ -48,7 +48,7 @@ namespace Asmichi.Utilities.ProcessManagement
             }
 
             {
-                var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "ExitCode", "-1");
+                var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "ExitCode", "-1");
 
                 using (var sut = ChildProcess.Start(si))
                 {
@@ -62,7 +62,7 @@ namespace Asmichi.Utilities.ProcessManagement
         [Fact]
         public void ExitCodeThrowsBeforeChildExits()
         {
-            var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoBack")
+            var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack")
             {
                 StdInputRedirection = InputRedirection.InputPipe,
             };
@@ -109,7 +109,7 @@ namespace Asmichi.Utilities.ProcessManagement
 
         private static ChildProcess CreateForWaitForExitTest()
         {
-            var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoBack")
+            var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack")
             {
                 StdInputRedirection = InputRedirection.InputPipe,
                 StdOutputRedirection = OutputRedirection.NullDevice,
@@ -121,7 +121,7 @@ namespace Asmichi.Utilities.ProcessManagement
         public async Task CorrectlyConnectOutputPipes()
         {
             {
-                var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoOutAndError")
+                var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoOutAndError")
                 {
                     StdOutputRedirection = OutputRedirection.OutputPipe,
                     StdErrorRedirection = OutputRedirection.ErrorPipe,
@@ -135,7 +135,7 @@ namespace Asmichi.Utilities.ProcessManagement
 
             {
                 // invert stdout and stderr
-                var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoOutAndError")
+                var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoOutAndError")
                 {
                     StdOutputRedirection = OutputRedirection.ErrorPipe,
                     StdErrorRedirection = OutputRedirection.OutputPipe,
@@ -151,7 +151,7 @@ namespace Asmichi.Utilities.ProcessManagement
         [Fact]
         public async Task PipesAreAsynchronous()
         {
-            var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoBack")
+            var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack")
             {
                 StdInputRedirection = InputRedirection.InputPipe,
                 StdOutputRedirection = OutputRedirection.OutputPipe,
@@ -176,7 +176,7 @@ namespace Asmichi.Utilities.ProcessManagement
                 // StdOutputFile StdErrorFile
                 {
                     // File
-                    var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoOutAndError")
+                    var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoOutAndError")
                     {
                         StdOutputRedirection = OutputRedirection.File,
                         StdOutputFile = outFile,
@@ -194,7 +194,7 @@ namespace Asmichi.Utilities.ProcessManagement
                     Assert.Equal("TestChild.Error", File.ReadAllText(errFile));
 
                     // AppendToFile
-                    si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoOutAndError")
+                    si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoOutAndError")
                     {
                         StdOutputRedirection = OutputRedirection.AppendToFile,
                         StdOutputFile = errFile,
@@ -217,7 +217,7 @@ namespace Asmichi.Utilities.ProcessManagement
                     const string text = "foobar";
                     File.WriteAllText(inFile, text);
 
-                    var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoBack")
+                    var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack")
                     {
                         StdInputRedirection = InputRedirection.File,
                         StdInputFile = inFile,
@@ -246,7 +246,7 @@ namespace Asmichi.Utilities.ProcessManagement
                 // StdOutputFile StdErrorFile
                 {
                     // File
-                    var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoOutAndError")
+                    var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoOutAndError")
                     {
                         StdOutputRedirection = OutputRedirection.File,
                         StdOutputFile = outFile,
@@ -263,7 +263,7 @@ namespace Asmichi.Utilities.ProcessManagement
                     Assert.Equal("TestChild.OutTestChild.Error", File.ReadAllText(outFile));
 
                     // AppendToFile
-                    si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoOutAndError")
+                    si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoOutAndError")
                     {
                         StdOutputRedirection = OutputRedirection.AppendToFile,
                         StdOutputFile = outFile,
@@ -297,7 +297,7 @@ namespace Asmichi.Utilities.ProcessManagement
                     using (var fsErr = File.Create(errFile))
                     {
                         // File
-                        var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoOutAndError")
+                        var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoOutAndError")
                         {
                             StdOutputRedirection = OutputRedirection.Handle,
                             StdOutputHandle = fsOut.SafeFileHandle,
@@ -323,7 +323,7 @@ namespace Asmichi.Utilities.ProcessManagement
 
                     using (var fsIn = File.OpenRead(inFile))
                     {
-                        var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoBack")
+                        var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack")
                         {
                             StdInputRedirection = InputRedirection.Handle,
                             StdInputHandle = fsIn.SafeFileHandle,
@@ -346,7 +346,7 @@ namespace Asmichi.Utilities.ProcessManagement
         [Fact]
         public void CanSetEnvironmentVariables()
         {
-            var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "DumpEnvironmentVariables")
+            var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "DumpEnvironmentVariables")
             {
                 StdOutputRedirection = OutputRedirection.OutputPipe,
                 EnvironmentVariables = new[] { ("A", "a"), ("BB", "bb") },
@@ -366,7 +366,7 @@ namespace Asmichi.Utilities.ProcessManagement
         {
             using (var tmp = new TemporaryDirectory())
             {
-                var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "EchoWorkingDirectory")
+                var si = new ChildProcessStartInfo(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoWorkingDirectory")
                 {
                     StdOutputRedirection = OutputRedirection.OutputPipe,
                     WorkingDirectory = tmp.Location,

@@ -19,7 +19,7 @@ namespace Asmichi.Utilities.ProcessManagement
                 {
                     StdOutputRedirection = OutputRedirection.OutputPipe,
                 };
-                si.Add(TestUtil.TestChildPath);
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath);
 
                 using (var sut = ProcessPipeline.Start(si))
                 {
@@ -32,8 +32,8 @@ namespace Asmichi.Utilities.ProcessManagement
                 {
                     StdOutputRedirection = OutputRedirection.OutputPipe,
                 };
-                si.Add(TestUtil.TestChildPath);
-                si.Add(TestUtil.TestChildPath, "EchoBack");
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath);
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack");
 
                 using (var sut = ProcessPipeline.Start(si))
                 {
@@ -46,9 +46,9 @@ namespace Asmichi.Utilities.ProcessManagement
         public void ReportsCreationFailure()
         {
             var si = new ProcessPipelineStartInfo();
-            si.Add(TestUtil.TestChildPath, "ExitCode", "0");
+            si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "ExitCode", "0");
             si.Add("nonexistentfile");
-            si.Add(TestUtil.TestChildPath, "ExitCode", "0");
+            si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "ExitCode", "0");
 
             using (var sut = ProcessPipeline.Start(si))
             {
@@ -62,9 +62,9 @@ namespace Asmichi.Utilities.ProcessManagement
         {
             {
                 var si = new ProcessPipelineStartInfo();
-                si.Add(TestUtil.TestChildPath, "ExitCode", "0");
-                si.Add(TestUtil.TestChildPath, "ExitCode", "0");
-                si.Add(TestUtil.TestChildPath, "ExitCode", "0");
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "ExitCode", "0");
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "ExitCode", "0");
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "ExitCode", "0");
 
                 using (var sut = ProcessPipeline.Start(si))
                 {
@@ -76,9 +76,9 @@ namespace Asmichi.Utilities.ProcessManagement
 
             {
                 var si = new ProcessPipelineStartInfo();
-                si.Add(TestUtil.TestChildPath, "ExitCode", "0");
-                si.Add(TestUtil.TestChildPath, "ExitCode", "1");
-                si.Add(TestUtil.TestChildPath, "ExitCode", "-1");
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "ExitCode", "0");
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "ExitCode", "1");
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "ExitCode", "-1");
 
                 using (var sut = ProcessPipeline.Start(si))
                 {
@@ -97,9 +97,9 @@ namespace Asmichi.Utilities.ProcessManagement
             {
                 StdInputRedirection = InputRedirection.InputPipe,
             };
-            si.Add(TestUtil.TestChildPath, new[] { "EchoBack" });
-            si.Add(TestUtil.TestChildPath, new[] { "EchoBack" });
-            si.Add(TestUtil.TestChildPath, new[] { "EchoBack" });
+            si.Add(TestUtil.DotnetCommand, new[] { TestUtil.TestChildPath, "EchoBack" });
+            si.Add(TestUtil.DotnetCommand, new[] { TestUtil.TestChildPath, "EchoBack" });
+            si.Add(TestUtil.DotnetCommand, new[] { TestUtil.TestChildPath, "EchoBack" });
 
             using (var sut = ProcessPipeline.Start(si))
             {
@@ -150,9 +150,9 @@ namespace Asmichi.Utilities.ProcessManagement
                 StdInputRedirection = InputRedirection.InputPipe,
                 StdOutputRedirection = OutputRedirection.NullDevice,
             };
-            si.Add(TestUtil.TestChildPath, "EchoBack");
-            si.Add(TestUtil.TestChildPath, "EchoBack");
-            si.Add(TestUtil.TestChildPath, "EchoBack");
+            si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack");
+            si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack");
+            si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack");
 
             return ProcessPipeline.Start(si);
         }
@@ -166,9 +166,9 @@ namespace Asmichi.Utilities.ProcessManagement
                     StdOutputRedirection = OutputRedirection.OutputPipe,
                     StdErrorRedirection = OutputRedirection.ErrorPipe,
                 };
-                si.Add(TestUtil.TestChildPath, "EchoOutAndError");
-                si.Add(TestUtil.TestChildPath, "EchoBack");
-                si.Add(TestUtil.TestChildPath, "EchoBack");
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoOutAndError");
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack");
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack");
 
                 using (var sut = ProcessPipeline.Start(si))
                 {
@@ -183,9 +183,9 @@ namespace Asmichi.Utilities.ProcessManagement
                     StdOutputRedirection = OutputRedirection.ErrorPipe,
                     StdErrorRedirection = OutputRedirection.OutputPipe,
                 };
-                si.Add(TestUtil.TestChildPath, "EchoOutAndError");
-                si.Add(TestUtil.TestChildPath, "EchoBack");
-                si.Add(TestUtil.TestChildPath, "EchoBack");
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoOutAndError");
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack");
+                si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack");
 
                 using (var sut = ProcessPipeline.Start(si))
                 {
@@ -203,9 +203,9 @@ namespace Asmichi.Utilities.ProcessManagement
                 StdOutputRedirection = OutputRedirection.OutputPipe,
                 StdErrorRedirection = OutputRedirection.ErrorPipe,
             };
-            si.Add(TestUtil.TestChildPath, "EchoBack");
-            si.Add(TestUtil.TestChildPath, "EchoBack");
-            si.Add(TestUtil.TestChildPath, "EchoBack");
+            si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack");
+            si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack");
+            si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack");
 
             using (var sut = ProcessPipeline.Start(si))
             {
@@ -220,8 +220,8 @@ namespace Asmichi.Utilities.ProcessManagement
             {
                 StdOutputRedirection = OutputRedirection.OutputPipe,
             };
-            si.Add(ProcessPipelineItemFlags.RedirectBothOutput, TestUtil.TestChildPath, "EchoOutAndError");
-            si.Add(new ProcessPipelineItem(TestUtil.TestChildPath, "EchoBack"));
+            si.Add(ProcessPipelineItemFlags.RedirectBothOutput, TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoOutAndError");
+            si.Add(new ProcessPipelineItem(TestUtil.DotnetCommand, TestUtil.TestChildPath, "EchoBack"));
 
             using (var sut = ProcessPipeline.Start(si))
             using (var sr = new StreamReader(sut.StandardOutput))
