@@ -65,17 +65,13 @@ namespace Asmichi.Utilities.ProcessManagement
         internal static unsafe SafeProcessHandle Start(
             string fileName,
             IReadOnlyCollection<string> arguments,
-            IReadOnlyCollection<KeyValuePair<string, string>> environmentVariables,
+            IReadOnlyCollection<(string name, string value)> environmentVariables,
             SafeHandle stdIn,
             SafeHandle stdOut,
             SafeHandle stdErr)
         {
-            if (environmentVariables != null)
-            {
-                throw new NotImplementedException();
-            }
-
             var commandLine = CommandLineUtil.MakeCommandLine(fileName, arguments ?? Array.Empty<string>());
+            var environmentBlock = environmentVariables != null ? EnvironmentBlockUtil.MakeEnvironmentBlockWin32(environmentVariables) : null;
 
             using (var inheritableHandleStore = new InheritableHandleStore(3))
             {
@@ -103,7 +99,7 @@ namespace Asmichi.Utilities.ProcessManagement
                             return InvokeCreateProcess(
                                 commandLine,
                                 creationFlags,
-                                null,
+                                environmentBlock,
                                 null,
                                 childStdInput,
                                 childStdOutput,
@@ -123,7 +119,7 @@ namespace Asmichi.Utilities.ProcessManagement
         private static unsafe SafeProcessHandle InvokeCreateProcess(
             StringBuilder commandLine,
             int creationFlags,
-            string environment,
+            char[] environmentBlock,
             string currentDirectory,
             SafeHandle stdInput,
             SafeHandle stdOutput,
@@ -143,7 +139,7 @@ namespace Asmichi.Utilities.ProcessManagement
                 lpAttributeList = attr.DangerousGetHandle(),
             };
 
-            fixed (char* pEnvironment = environment)
+            fixed (char* pEnvironment = environmentBlock)
             {
                 var pi = default(Kernel32.PROCESS_INFORMATION);
                 bool processCreated = false;

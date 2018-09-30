@@ -7,7 +7,6 @@ This library can be obtained via [NuGet](https://www.nuget.org/packages/Asmichi.
 
 - Concentrates on creating a child process and obtaining its output.
     - Cannot query status of a process.
-- Can redirect stdin, stdout and stderr differently.
 - More destinations of redirection:
     - NUL
     - File (optionally appended)
@@ -19,10 +18,6 @@ This library can be obtained via [NuGet](https://www.nuget.org/packages/Asmichi.
     - stderr to the current stderr
 - Pipes are asynchronous; asynchronous reads and writes will be handled by IO completion ports.
 - `WaitForExitAsync`.
-
-## Features Not Implemented Yet
-
-- Custom environment variables.
 
 # License
 
@@ -42,6 +37,10 @@ Runtimes:
 - `win7-x64` or later (Desktop)
 
 `linux-x64` support is planned but not implemented.
+
+# Notes
+
+- When overriding environment variables, it is recommended that you include basic environment variables such as `SystemRoot`, etc.
 
 # Examples
 

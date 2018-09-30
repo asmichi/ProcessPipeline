@@ -123,7 +123,7 @@ namespace Asmichi.Utilities.ProcessManagement
         /// The list of the environment variables that apply to the child process.
         /// If it is null, the child process inherits the environment variables of the current process.
         /// </summary>
-        internal IReadOnlyCollection<KeyValuePair<string, string>> EnvironmentVariables { get; set; }
+        public IReadOnlyCollection<(string name, string value)> EnvironmentVariables { get; set; }
 
         /// <summary>
         /// Specifies how the stdin of the child process is redirected.

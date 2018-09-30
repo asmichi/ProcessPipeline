@@ -342,5 +342,23 @@ namespace Asmichi.Utilities.ProcessManagement
                 }
             }
         }
+
+        [Fact]
+        public void CanSetEnvironmentVariables()
+        {
+            var si = new ChildProcessStartInfo(TestUtil.TestChildPath, "DumpEnvironmentVariables")
+            {
+                StdOutputRedirection = OutputRedirection.OutputPipe,
+                EnvironmentVariables = new[] { ("A", "a"), ("BB", "bb") },
+            };
+
+            using (var sut = ChildProcess.Start(si))
+            using (var sr = new StreamReader(sut.StandardOutput))
+            {
+                var output = sr.ReadToEnd();
+                sut.WaitForExit();
+                Assert.Equal(new[] { "A=a", "BB=bb" }, output.Split(new char[] { '\0' }, StringSplitOptions.RemoveEmptyEntries));
+            }
+        }
     }
 }

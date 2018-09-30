@@ -22,7 +22,7 @@ namespace Asmichi.Utilities.ProcessManagement
             Assert.Null(sut.StdErrorHandle);
             Assert.Null(sut.FileName);
             Assert.Null(sut.Arguments);
-            // Assert.Null(sut.EnvironmentVariables);
+            Assert.Null(sut.EnvironmentVariables);
         }
     }
 }

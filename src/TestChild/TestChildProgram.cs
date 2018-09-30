@@ -1,6 +1,7 @@
 ﻿// Copyright 2018 @asmichi (at github). Licensed under the MIT License. See LICENCE in the project root for details.
 
 using System;
+using System.Linq;
 using System.Threading;
 
 namespace Asmichi.Utilities
@@ -26,6 +27,8 @@ namespace Asmichi.Utilities
                     return CommandEchoBack();
                 case "Sleep":
                     return CommandSleep(args);
+                case "DumpEnvironmentVariables":
+                    return CommandDumpEnvironmentVariables();
                 default:
                     Console.WriteLine("Unknown command: {0}", command);
                     return 1;
@@ -56,6 +59,18 @@ namespace Asmichi.Utilities
         {
             int duration = int.Parse(args[1]);
             Thread.Sleep(duration);
+            return 0;
+        }
+
+        private static int CommandDumpEnvironmentVariables()
+        {
+            var evars = Environment.GetEnvironmentVariables();
+
+            foreach (var key in evars.Keys.Cast<string>().OrderBy(x => x))
+            {
+                Console.Write("{0}={1}\0", key, (string)evars[key]);
+            }
+
             return 0;
         }
     }
