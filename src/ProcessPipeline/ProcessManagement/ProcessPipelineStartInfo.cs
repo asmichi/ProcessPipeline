@@ -64,7 +64,7 @@ namespace Asmichi.Utilities.ProcessManagement
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessPipelineItem"/> class with the specified command.
         /// </summary>
-        /// <param name="flags"><see cref="ProcessPipelineItemFlags"/></param>
+        /// <param name="flags"><see cref="ProcessPipelineItemFlags"/>.</param>
         /// <param name="fileName">Path to the executable to start.</param>
         /// <param name="arguments">The command-line arguments to be passed to the child process.</param>
         public void Add(ProcessPipelineItemFlags flags, string fileName, params string[] arguments)
@@ -81,7 +81,7 @@ namespace Asmichi.Utilities.ProcessManagement
 
         /// <summary>
         /// The command-line arguments to be passed to the child process.
-        /// null will be treated as <code>Array.Empty&lt;string&gt;()</code>.
+        /// null will be treated as Array.Empty&lt;string&gt;().
         /// </summary>
         public IReadOnlyCollection<string> Arguments { get; set; }
 
@@ -178,7 +178,7 @@ namespace Asmichi.Utilities.ProcessManagement
         /// <summary>
         /// Adds an item of the pipeline. Its stdout and the stderr are redirected as specified in <paramref name="flags"/>.
         /// </summary>
-        /// <param name="flags"><see cref="ProcessPipelineItemFlags"/></param>
+        /// <param name="flags"><see cref="ProcessPipelineItemFlags"/>.</param>
         /// <param name="fileName">Path to the executable to start.</param>
         /// <param name="arguments">The command-line arguments to be passed to the child process.</param>
         public void Add(ProcessPipelineItemFlags flags, string fileName, params string[] arguments)

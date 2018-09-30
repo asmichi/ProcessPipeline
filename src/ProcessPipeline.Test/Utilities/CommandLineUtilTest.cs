@@ -17,32 +17,32 @@ namespace Asmichi.Utilities.Utilities
             // NOTE: in the following asserts, we substitute ' for " to ease escaping.
 
             // no need for quoting
-            assert("cmd 1 2 3", "cmd", "1", "2", "3");
-            assert(@"c\m\d\ \1\2\3\", @"c\m\d\", @"\1\2\3\");
+            Assert("cmd 1 2 3", "cmd", "1", "2", "3");
+            Assert(@"c\m\d\ \1\2\3\", @"c\m\d\", @"\1\2\3\");
 
             // spaces, tabs
-            assert(@"'c m d' '1 2' a", "c m d", "1 2", "a");
-            assert("'c\tm\td' '1\t2' a", "c\tm\td", "1\t2", "a");
-            assert(@"'c m d' ' 1 2 ' a", "c m d", " 1 2 ", "a");
-            assert("'c\tm\td' '\t1\t2\t' a", "c\tm\td", "\t1\t2\t", "a");
+            Assert("'c m d' '1 2' a", "c m d", "1 2", "a");
+            Assert("'c\tm\td' '1\t2' a", "c\tm\td", "1\t2", "a");
+            Assert("'c m d' ' 1 2 ' a", "c m d", " 1 2 ", "a");
+            Assert("'c\tm\td' '\t1\t2\t' a", "c\tm\td", "\t1\t2\t", "a");
 
             // quotes
-            assert(@"'\'cmd\'' '\'1\''", "'cmd'", "'1'");
+            Assert(@"'\'cmd\'' '\'1\''", "'cmd'", "'1'");
 
             // backslashes in a quoted part (no need for escape)
-            assert(@"'c m\d' '1 2\3'", @"c m\d", @"1 2\3");
+            Assert(@"'c m\d' '1 2\3'", @"c m\d", @"1 2\3");
 
             // backslashes followed by a double quote
-            assert(@"'cmd\\\'' '123\\\''", @"cmd\'", @"123\'");
-            assert(@"'cmd\\\\\'' '123\\\\\''", @"cmd\\'", @"123\\'");
+            Assert(@"'cmd\\\'' '123\\\''", @"cmd\'", @"123\'");
+            Assert(@"'cmd\\\\\'' '123\\\\\''", @"cmd\\'", @"123\\'");
 
-            void assert(string expected, string fileName, params string[] args)
+            void Assert(string expected, string fileName, params string[] args)
             {
-                string replace(string s) => s.Replace('\'', '"');
+                string Replace(string s) => s.Replace('\'', '"');
 
-                Assert.Equal(
-                    replace(expected),
-                    CommandLineUtil.MakeCommandLine(replace(fileName), args.Select(replace).ToArray()).ToString());
+                Xunit.Assert.Equal(
+                    Replace(expected),
+                    CommandLineUtil.MakeCommandLine(Replace(fileName), args.Select(Replace).ToArray()).ToString());
             }
         }
     }

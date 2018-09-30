@@ -42,8 +42,8 @@ namespace Asmichi.Utilities.ProcessManagement
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessCreationFailedException"/> class with serialized data.
         /// </summary>
-        /// <param name="info"><see cref="SerializationInfo"/></param>
-        /// <param name="context"><see cref="StreamingContext"/></param>
+        /// <param name="info"><see cref="SerializationInfo"/>.</param>
+        /// <param name="context"><see cref="StreamingContext"/>.</param>
         protected ProcessCreationFailedException(
             SerializationInfo info,
             StreamingContext context)

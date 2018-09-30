@@ -52,7 +52,7 @@ namespace Asmichi.Utilities.ProcessManagement
         /// Waits <paramref name="millisecondsTimeout"/> milliseconds for the process to exit.
         /// </summary>
         /// <param name="millisecondsTimeout">The amount of time in milliseconds to wait for the process to exit. <see cref="Timeout.Infinite"/> means infinite amount of time.</param>
-        /// <returns>true if the process has exited. Otherwise false</returns>
+        /// <returns>true if the process has exited. Otherwise false.</returns>
         bool WaitForExit(int millisecondsTimeout);
 
         /// <summary>

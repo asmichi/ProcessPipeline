@@ -60,7 +60,7 @@ namespace Asmichi.Utilities
             var si = new ChildProcessStartInfo("cmd", "/C", "set")
             {
                 StdOutputRedirection = OutputRedirection.File,
-                StdOutputFile = "env.txt"
+                StdOutputFile = "env.txt",
             };
 
             using (var p = ChildProcess.Start(si))
@@ -78,7 +78,7 @@ namespace Asmichi.Utilities
             var si = new ProcessPipelineStartInfo()
             {
                 StdOutputRedirection = OutputRedirection.File,
-                StdOutputFile = "env.txt"
+                StdOutputFile = "env.txt",
             };
             si.Add("cmd", "/C", "set");
             si.Add("findstr", "PROCESSOR");
@@ -106,7 +106,7 @@ namespace Asmichi.Utilities
 
             for (int i = 0; i < N; i++)
             {
-                tasks[i] = spawnCmdAsync();
+                tasks[i] = SpawnCmdAsync();
             }
 
             // Spawned 128 processes.
@@ -117,7 +117,7 @@ namespace Asmichi.Utilities
             Console.WriteLine("The {0} processes have exited.", N);
             Console.WriteLine("Elapsed Time: {0} ms", stopWatch.ElapsedMilliseconds);
 
-            async Task spawnCmdAsync()
+            async Task SpawnCmdAsync()
             {
                 var si = new ChildProcessStartInfo("cmd", "/C", "timeout", "3")
                 {

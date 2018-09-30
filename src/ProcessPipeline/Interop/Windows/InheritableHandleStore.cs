@@ -8,7 +8,7 @@ namespace Asmichi.Utilities.Interop.Windows
 {
     /// <summary>
     /// Stores inheritable handles. When an uninheritable handle would be added, creates and stores a temporary inheritable duplicate of it.
-    /// Typically those handles will be passed to <code>UpdateProcThreadAttribute</code>.
+    /// Typically those handles will be passed to UpdateProcThreadAttribute.
     /// </summary>
     internal sealed class InheritableHandleStore : IDisposable
     {
@@ -58,10 +58,10 @@ namespace Asmichi.Utilities.Interop.Windows
 
         /// <summary>
         /// Add a handle to this.
-        /// If <code>handle</code> is not inheritable, returns an inheritable duplicate. Otherwise returns `handle`.
+        /// If <paramref name="handle"/> is not inheritable, returns an inheritable duplicate. Otherwise returns <paramref name="handle"/>.
         /// </summary>
         /// <param name="handle">A handle.</param>
-        /// <returns>An inheritable handle that points to the same object as <code>handle</code>.</returns>
+        /// <returns>An inheritable handle that points to the same object as <paramref name="handle"/>.</returns>
         public SafeHandle Add(SafeHandle handle)
         {
             // Avoid adding an existing handle.

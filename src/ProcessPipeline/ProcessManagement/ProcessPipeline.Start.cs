@@ -17,7 +17,7 @@ namespace Asmichi.Utilities.ProcessManagement
         /// Please note that <see cref="Start(ProcessPipelineStartInfo)"/> does not throw <see cref="ProcessCreationFailedException"/>
         /// when one of the child processes cannot be created. Instead <see cref="GetExitCodes"/> returns an exit code of null for such a process.
         /// </remarks>
-        /// <param name="startInfo"><see cref="ProcessPipelineStartInfo"/></param>
+        /// <param name="startInfo"><see cref="ProcessPipelineStartInfo"/>.</param>
         /// <returns>The started process pipeline.</returns>
         /// <exception cref="IOException">Failed to open a specified file.</exception>
         public static ProcessPipeline Start(ProcessPipelineStartInfo startInfo)

@@ -1,6 +1,6 @@
 ﻿<Project>
 
-  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />  
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 
   <PropertyGroup>
     <AssemblyName>Asmichi.Utilities.ProcessPipeline.Test</AssemblyName>
@@ -15,7 +15,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2">
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta009">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -41,5 +41,5 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /q $(BinDir)TestChild\AnyCPU\$(ConfigurationName)\net471\TestChild.exe $(TargetDir) &gt; NUL</PostBuildEvent>
   </PropertyGroup>
-  
+
 </Project>

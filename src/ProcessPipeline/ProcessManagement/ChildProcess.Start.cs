@@ -21,7 +21,7 @@ namespace Asmichi.Utilities.ProcessManagement
         /// <summary>
         /// Starts a child process as specified in <paramref name="startInfo"/>.
         /// </summary>
-        /// <param name="startInfo"><see cref="ChildProcessStartInfo"/></param>
+        /// <param name="startInfo"><see cref="ChildProcessStartInfo"/>.</param>
         /// <returns>The started process.</returns>
         /// <exception cref="IOException">Failed to open a specified file.</exception>
         /// <exception cref="ProcessCreationFailedException">Process creation failed.</exception>

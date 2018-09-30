@@ -115,7 +115,7 @@ namespace Asmichi.Utilities.ProcessManagement
 
         /// <summary>
         /// The command-line arguments to be passed to the child process.
-        /// null will be treated as <code>Array.Empty&lt;string&gt;()</code>.
+        /// null will be treated as Array.Empty&lt;string&gt;().
         /// </summary>
         public IReadOnlyCollection<string> Arguments { get; set; }
 
