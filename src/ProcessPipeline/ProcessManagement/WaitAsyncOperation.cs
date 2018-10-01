@@ -35,6 +35,7 @@ namespace Asmichi.Utilities.ProcessManagement
             return _completionSource.Task;
         }
 
+        // NOTE: This callback is called synchronously from CTS.Cancel().
         private static void WaitForExitCanceled(object state)
         {
             // Ensure that all writes made by Register are visible.
@@ -44,10 +45,11 @@ namespace Asmichi.Utilities.ProcessManagement
 
             var self = (WaitAsyncOperation)state;
 
-            self._completionSource.TrySetCanceled();
             self.ReleaseResources();
+            self._completionSource.TrySetCanceled();
         }
 
+        // NOTE: This callback is executed on a thread-pool thread.
         private static void WaitForExitCompleted(object state, bool timedOut)
         {
             // Ensure that all writes made by Register are visible.
@@ -57,9 +59,9 @@ namespace Asmichi.Utilities.ProcessManagement
 
             var self = (WaitAsyncOperation)state;
 
+            self.ReleaseResources();
             // Not calling parent.DangerousRetrieveExitCode here. It would require some memory barrier.
             self._completionSource.TrySetResult(!timedOut);
-            self.ReleaseResources();
         }
 
         private void ReleaseResources()
