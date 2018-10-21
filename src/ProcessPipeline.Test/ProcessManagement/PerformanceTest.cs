@@ -47,24 +47,23 @@ namespace Asmichi.Utilities.ProcessManagement
 
         private static void WaitForAsyncIsTrulyAsynchronous(IChildProcess sut)
         {
-            void CreateWaitTask()
-            {
-                var waitTask = sut.WaitForExitAsync(1000);
-                Assert.False(waitTask.IsCompleted);
-            }
-
             var sw = Stopwatch.StartNew();
             // Because WaitForExitAsync is truly asynchronous and does not block a thread-pool thread,
             // we can create WaitForExitAsync tasks without consuming thread-pool threads.
             // In other words, if WaitForExitAsync would consume a thread-pool thread, the works queued by Task.Run would be blocked.
-            var createWaitTaskTasks =
+            var waitTasks =
                 Enumerable.Range(0, Environment.ProcessorCount * 8)
-                .Select(_ => Task.Run(CreateWaitTask))
+                .Select(_ => sut.WaitForExitAsync(1000))
                 .ToArray();
-            Task.WaitAll(createWaitTaskTasks);
+            Assert.True(waitTasks.All(x => !x.IsCompleted));
 
-            var elapsedMilliseconds = sw.ElapsedMilliseconds;
-            Assert.True(elapsedMilliseconds < 100);
+            var emptyTasks =
+                Enumerable.Range(0, Environment.ProcessorCount * 8)
+                .Select(_ => Task.Run(() => { }))
+                .ToArray();
+            Task.WaitAll(emptyTasks);
+
+            Assert.True(sw.ElapsedMilliseconds < 100);
         }
     }
 }
