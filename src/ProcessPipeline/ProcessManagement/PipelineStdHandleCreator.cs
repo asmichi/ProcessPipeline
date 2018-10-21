@@ -63,33 +63,23 @@ namespace Asmichi.Utilities.ProcessManagement
                     nameof(ChildProcessStartInfo.StdErrorRedirection));
             }
 
-            var inputWritePipe = default(SafeFileHandle);
-            var outputReadPipe = default(SafeFileHandle);
-            var errorReadPipe = default(SafeFileHandle);
-
             try
             {
                 if (stdInputRedirection == InputRedirection.InputPipe)
                 {
-                    (_inputReadPipe, inputWritePipe) = FilePal.CreatePipePairWithAsyncServerSide(System.IO.Pipes.PipeDirection.Out);
-                    this.InputStream = new FileStream(inputWritePipe, FileAccess.Write, 4096, isAsync: true);
-                    inputWritePipe = null;
+                    (this.InputStream, _inputReadPipe) = FilePal.CreatePipePairWithAsyncServerSide(System.IO.Pipes.PipeDirection.Out);
                 }
 
                 if (stdOutputRedirection == OutputRedirection.OutputPipe
                     || stdErrorRedirection == OutputRedirection.OutputPipe)
                 {
-                    (outputReadPipe, _outputWritePipe) = FilePal.CreatePipePairWithAsyncServerSide(System.IO.Pipes.PipeDirection.In);
-                    this.OutputStream = new FileStream(outputReadPipe, FileAccess.Read, 4096, isAsync: true);
-                    outputReadPipe = null;
+                    (this.OutputStream, _outputWritePipe) = FilePal.CreatePipePairWithAsyncServerSide(System.IO.Pipes.PipeDirection.In);
                 }
 
                 if (stdOutputRedirection == OutputRedirection.ErrorPipe
                     || stdErrorRedirection == OutputRedirection.ErrorPipe)
                 {
-                    (errorReadPipe, _errorWritePipe) = FilePal.CreatePipePairWithAsyncServerSide(System.IO.Pipes.PipeDirection.In);
-                    this.ErrorStream = new FileStream(errorReadPipe, FileAccess.Read, 4096, isAsync: true);
-                    errorReadPipe = null;
+                    (this.ErrorStream, _errorWritePipe) = FilePal.CreatePipePairWithAsyncServerSide(System.IO.Pipes.PipeDirection.In);
                 }
 
                 this.PipelineStdIn = ChooseInput(
@@ -123,12 +113,6 @@ namespace Asmichi.Utilities.ProcessManagement
             {
                 Dispose();
                 throw;
-            }
-            finally
-            {
-                inputWritePipe?.Dispose();
-                outputReadPipe?.Dispose();
-                errorReadPipe?.Dispose();
             }
         }
 

@@ -62,12 +62,12 @@ namespace Asmichi.Utilities.Interop
 
         /// <summary>
         /// Creates a pipe pair. Overlapped mode is enabled for the server side.
-        /// If <paramref name="pipeDirection"/> is <see cref="PipeDirection.In"/>, readPipe is created with Overlapped mode enabled.
-        /// If <see cref="PipeDirection.Out"/>, writePipe is created with Overlapped mode enabled.
+        /// If <paramref name="pipeDirection"/> is <see cref="PipeDirection.In"/>, clientPipe is created with Overlapped mode enabled.
+        /// If <see cref="PipeDirection.Out"/>, serverStream is created with Overlapped mode enabled.
         /// </summary>
         /// <param name="pipeDirection">Specifies which side is the server side.</param>
         /// <returns>A pipe pair.</returns>
-        public static (SafeFileHandle readPipe, SafeFileHandle writePipe) CreatePipePairWithAsyncServerSide(PipeDirection pipeDirection)
+        public static (Stream serverStream, SafeFileHandle clientPipe) CreatePipePairWithAsyncServerSide(PipeDirection pipeDirection)
         {
             var (serverMode, clientMode) = ToModes(pipeDirection);
 
@@ -121,13 +121,18 @@ namespace Asmichi.Utilities.Interop
                     }
                 }
 
-                if (pipeDirection == PipeDirection.In)
+                try
                 {
-                    return (serverPipe, clientPipe);
+                    var streamAccess = pipeDirection == PipeDirection.In ? FileAccess.Read : FileAccess.Write;
+                    var serverStream = new FileStream(serverPipe, streamAccess, 4096, isAsync: true);
+
+                    return (serverStream, clientPipe);
                 }
-                else
+                catch
                 {
-                    return (clientPipe, serverPipe);
+                    serverPipe.Dispose();
+                    clientPipe.Dispose();
+                    throw;
                 }
             }
         }
