@@ -12,6 +12,8 @@ namespace Asmichi.Utilities.Interop.Windows
 {
     internal static partial class Kernel32
     {
+        public const int ERROR_PIPE_BUSY = 231;
+
         public const uint GENERIC_READ = 0x80000000;
         public const uint GENERIC_WRITE = 0x40000000;
 

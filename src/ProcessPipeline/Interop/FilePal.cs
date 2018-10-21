@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Asmichi.Utilities.Interop.Windows;
 using Microsoft.Win32.SafeHandles;
@@ -70,50 +71,64 @@ namespace Asmichi.Utilities.Interop
         {
             var (serverMode, clientMode) = ToModes(pipeDirection);
 
-            // Make a unique name of a named pipe to create.
-            var thisPipeSerialNumber = Interlocked.Increment(ref pipeSerialNumber);
-            var pipeName = string.Format(
-                CultureInfo.InvariantCulture,
-                @"\\.\pipe\Asmichi.ProcessPipeline.7785FB5A-AB05-42B2-BC02-A14769CC463E.{0}.{1}",
-                Kernel32.GetCurrentProcessId(),
-                thisPipeSerialNumber);
-
-            var serverPipe = Kernel32.CreateNamedPipe(
-                pipeName,
-                serverMode | Kernel32.FILE_FLAG_OVERLAPPED | Kernel32.FILE_FLAG_FIRST_PIPE_INSTANCE,
-                Kernel32.PIPE_TYPE_BYTE | Kernel32.PIPE_READMODE_BYTE | Kernel32.PIPE_WAIT | Kernel32.PIPE_REJECT_REMOTE_CLIENTS,
-                1,
-                4096,
-                4096,
-                0,
-                IntPtr.Zero);
-            if (serverPipe.IsInvalid)
+            while (true)
             {
-                throw new Win32Exception();
-            }
+                // Make a unique name of a named pipe to create.
+                var thisPipeSerialNumber = Interlocked.Increment(ref pipeSerialNumber);
+                var pipeName = string.Format(
+                    CultureInfo.InvariantCulture,
+                    @"\\.\pipe\Asmichi.ProcessPipeline.7785FB5A-AB05-42B2-BC02-A14769CC463E.{0}.{1}",
+                    Kernel32.GetCurrentProcessId(),
+                    thisPipeSerialNumber);
 
-            var clientPipe = Kernel32.CreateFile(
-                pipeName,
-                clientMode,
-                0,
-                IntPtr.Zero,
-                Kernel32.OPEN_EXISTING,
-                0,
-                IntPtr.Zero);
+                var serverPipe = Kernel32.CreateNamedPipe(
+                    pipeName,
+                    serverMode | Kernel32.FILE_FLAG_OVERLAPPED | Kernel32.FILE_FLAG_FIRST_PIPE_INSTANCE,
+                    Kernel32.PIPE_TYPE_BYTE | Kernel32.PIPE_READMODE_BYTE | Kernel32.PIPE_WAIT | Kernel32.PIPE_REJECT_REMOTE_CLIENTS,
+                    1,
+                    4096,
+                    4096,
+                    0,
+                    IntPtr.Zero);
+                if (serverPipe.IsInvalid)
+                {
+                    throw new Win32Exception();
+                }
 
-            if (clientPipe.IsInvalid)
-            {
-                serverPipe.Dispose();
-                throw new Win32Exception();
-            }
+                var clientPipe = Kernel32.CreateFile(
+                    pipeName,
+                    clientMode,
+                    0,
+                    IntPtr.Zero,
+                    Kernel32.OPEN_EXISTING,
+                    0,
+                    IntPtr.Zero);
 
-            if (pipeDirection == PipeDirection.In)
-            {
-                return (serverPipe, clientPipe);
-            }
-            else
-            {
-                return (clientPipe, serverPipe);
+                if (clientPipe.IsInvalid)
+                {
+                    var lastError = Marshal.GetLastWin32Error();
+
+                    serverPipe.Dispose();
+
+                    if (lastError == Kernel32.ERROR_PIPE_BUSY)
+                    {
+                        // The pipe has been stolen by an unrelated process; retry creation.
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Win32Exception();
+                    }
+                }
+
+                if (pipeDirection == PipeDirection.In)
+                {
+                    return (serverPipe, clientPipe);
+                }
+                else
+                {
+                    return (clientPipe, serverPipe);
+                }
             }
         }
 
