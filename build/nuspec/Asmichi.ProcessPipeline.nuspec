@@ -12,7 +12,7 @@
     <releaseNotes/>
     <copyright>Copyright (c) 2018 @asmichi (on github)</copyright>
     <tags>win32 process</tags>
-    <repository type="git" url="https://github.com/asmichi/ProcessPipeline" />
+    <repository type="git" url="https://github.com/asmichi/ProcessPipeline" commit="$commitHash$"/>
     <dependencies>
       <group targetFramework=".NETFramework4.6.1">
         <dependency id="System.Memory" version="4.5.1" exclude="Build,Analyzers" />

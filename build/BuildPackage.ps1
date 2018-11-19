@@ -27,7 +27,8 @@ function Exec {
 $worktreeRoot = Resolve-Path "$PSScriptRoot\.."
 $slnFile = "$worktreeRoot\src\ProcessPipeline.sln"
 
-$shortCommitHash = (git rev-parse --short=10 HEAD)
+$commitHash = (git rev-parse HEAD)
+$shortCommitHash = $commitHash.Substring(0, 10)
 $commitCount = (git rev-list --count HEAD)
 $baseVersion = Get-Content "$worktreeRoot\build\Version.txt"
 $assemblyVersion = "$baseVersion.0"
@@ -63,5 +64,6 @@ Exec {
         -Version $packageVersion `
         -BasePath "$worktreeRoot\bin\ProcessPipeline\AnyCPU\Release" `
         -OutputDirectory "$worktreeRoot\bin\nupkg" `
+        -Properties commitHash=$commitHash `
         "$worktreeRoot\build\nuspec\Asmichi.ProcessPipeline.nuspec"
 }
