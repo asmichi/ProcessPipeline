@@ -8,7 +8,7 @@ using Microsoft.Win32.SafeHandles;
 namespace Asmichi.Utilities.ProcessManagement
 {
     /// <summary>
-    /// Specified how a stdin is redirected.
+    /// Specifies how a stdin is redirected.
     /// </summary>
     public enum InputRedirection
     {
@@ -39,7 +39,7 @@ namespace Asmichi.Utilities.ProcessManagement
     }
 
     /// <summary>
-    /// Specified how a stdout or a stderr is redirected.
+    /// Specifies how a stdout or a stderr is redirected.
     /// </summary>
     public enum OutputRedirection
     {
