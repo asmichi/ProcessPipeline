@@ -43,6 +43,25 @@ namespace Asmichi.Utilities.Interop.Windows
             }
         }
 
+        public unsafe void AttachToPseudoConsole(SafePseudoConsoleHandle handle)
+        {
+            _ = handle ?? throw new ArgumentNullException(nameof(handle));
+
+            if (!Kernel32.UpdateProcThreadAttribute(
+                _unmanaged,
+                0,
+                Kernel32.PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE,
+                handle.DangerousGetHandle().ToPointer(),
+                new IntPtr(sizeof(IntPtr)),
+                IntPtr.Zero,
+                IntPtr.Zero))
+            {
+                throw new Win32Exception();
+            }
+
+            GC.KeepAlive(handle);
+        }
+
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         public IntPtr DangerousGetHandle() => _unmanaged.DangerousGetHandle();
 

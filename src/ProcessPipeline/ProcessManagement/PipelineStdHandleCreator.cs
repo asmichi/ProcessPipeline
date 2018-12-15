@@ -3,7 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using Asmichi.Utilities.Interop;
+using Asmichi.Utilities.Interop.Windows;
 using Microsoft.Win32.SafeHandles;
 
 namespace Asmichi.Utilities.ProcessManagement
@@ -16,6 +18,7 @@ namespace Asmichi.Utilities.ProcessManagement
         private readonly SafeFileHandle _inputReadPipe;
         private readonly SafeFileHandle _outputWritePipe;
         private readonly SafeFileHandle _errorWritePipe;
+        private SafePseudoConsoleHandle _pseudoConsoleHandle;
         private List<IDisposable> _objectsToDispose;
         private bool _isDisposed;
 
@@ -66,6 +69,10 @@ namespace Asmichi.Utilities.ProcessManagement
             var inputWritePipe = default(SafeFileHandle);
             var outputReadPipe = default(SafeFileHandle);
             var errorReadPipe = default(SafeFileHandle);
+            var pseudoConsoleInputWritePipe = default(SafeFileHandle);
+            var pseudoConsoleInputReadPipeForChild = default(SafeFileHandle);
+            var pseudoConsoleOutputWritePipeForChild = default(SafeFileHandle);
+            var pseudoConsoleOutputReadPipe = default(SafeFileHandle);
 
             try
             {
@@ -91,6 +98,22 @@ namespace Asmichi.Utilities.ProcessManagement
                     this.ErrorStream = new FileStream(errorReadPipe, FileAccess.Read, 4096, isAsync: true);
                     errorReadPipe = null;
                 }
+
+                (pseudoConsoleInputReadPipeForChild, pseudoConsoleInputWritePipe) = FilePal.CreatePipePairWithAsyncServerSide(System.IO.Pipes.PipeDirection.Out);
+                this.PseudoConsoleInputStream = new FileStream(pseudoConsoleInputWritePipe, FileAccess.Write, 4096, isAsync: true);
+                pseudoConsoleInputWritePipe = null;
+
+                (pseudoConsoleOutputReadPipe, pseudoConsoleOutputWritePipeForChild) = FilePal.CreatePipePairWithAsyncServerSide(System.IO.Pipes.PipeDirection.In);
+                this.PseudoConsoleOutputStream = new FileStream(pseudoConsoleOutputReadPipe, FileAccess.Read, 4096, isAsync: true);
+                pseudoConsoleOutputReadPipe = null;
+
+                var hr = Kernel32.CreatePseudoConsole(
+                    new Kernel32.COORD(80, 25),
+                    pseudoConsoleInputReadPipeForChild,
+                    pseudoConsoleOutputWritePipeForChild,
+                    0,
+                    out _pseudoConsoleHandle);
+                Marshal.ThrowExceptionForHR(hr);
 
                 this.PipelineStdIn = ChooseInput(
                     stdInputRedirection,
@@ -129,6 +152,11 @@ namespace Asmichi.Utilities.ProcessManagement
                 inputWritePipe?.Dispose();
                 outputReadPipe?.Dispose();
                 errorReadPipe?.Dispose();
+                pseudoConsoleInputWritePipe?.Dispose();
+                pseudoConsoleOutputReadPipe?.Dispose();
+                // Can be closed after passed to CreatePseudoConsole.
+                pseudoConsoleInputReadPipeForChild?.Dispose();
+                pseudoConsoleOutputWritePipeForChild?.Dispose();
             }
         }
 
@@ -147,6 +175,8 @@ namespace Asmichi.Utilities.ProcessManagement
                 _inputReadPipe?.Dispose();
                 _outputWritePipe?.Dispose();
                 _errorWritePipe?.Dispose();
+                _pseudoConsoleHandle?.Dispose();
+
                 InputStream?.Dispose();
                 OutputStream?.Dispose();
                 ErrorStream?.Dispose();
@@ -169,6 +199,8 @@ namespace Asmichi.Utilities.ProcessManagement
         /// </summary>
         public SafeFileHandle PipelineStdErr { get; }
 
+        public SafePseudoConsoleHandle PseudoConsoleHandle => _pseudoConsoleHandle;
+
         /// <summary>
         /// An asynchronous <see cref="Stream"/> that writes to the pipeline.
         /// </summary>
@@ -184,15 +216,22 @@ namespace Asmichi.Utilities.ProcessManagement
         /// </summary>
         public Stream ErrorStream { get; private set; }
 
+        public Stream PseudoConsoleOutputStream { get; private set; }
+
+        public Stream PseudoConsoleInputStream { get; private set; }
+
         /// <summary>
         /// Detaches <see cref="InputStream"/>, <see cref="OutputStream"/> and <see cref="ErrorStream"/> so that they will no be disposed by this instance.
         /// Must be called in order to expose the streams to the caller.
         /// </summary>
-        public void DetachStreams()
+        public void DetachHandles()
         {
             InputStream = null;
             OutputStream = null;
             ErrorStream = null;
+            _pseudoConsoleHandle = null;
+            PseudoConsoleOutputStream = null;
+            PseudoConsoleInputStream = null;
         }
 
         private SafeFileHandle ChooseInput(

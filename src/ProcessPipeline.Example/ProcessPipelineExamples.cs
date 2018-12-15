@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Asmichi.Utilities.ProcessManagement;
 
@@ -16,23 +18,52 @@ namespace Asmichi.Utilities
     {
         public static async Task Main()
         {
-            WriteHeader(nameof(BasicAsync));
-            await BasicAsync();
+            WriteHeader(nameof(PseudoConsoleAsync));
+            await PseudoConsoleAsync();
 
-            WriteHeader(nameof(RedirectionToFileAsync));
-            await RedirectionToFileAsync();
+            // WriteHeader(nameof(BasicAsync));
+            // await BasicAsync();
 
-            WriteHeader(nameof(PipelineAsync));
-            await PipelineAsync();
+            // WriteHeader(nameof(RedirectionToFileAsync));
+            // await RedirectionToFileAsync();
 
-            WriteHeader(nameof(WaitForExitAsync));
-            await WaitForExitAsync();
+            // WriteHeader(nameof(PipelineAsync));
+            // await PipelineAsync();
+
+            // WriteHeader(nameof(WaitForExitAsync));
+            // await WaitForExitAsync();
         }
 
         private static void WriteHeader(string name)
         {
             Console.WriteLine();
             Console.WriteLine("*** {0}", name);
+        }
+
+        private static async Task PseudoConsoleAsync()
+        {
+            var si = new ChildProcessStartInfo("ping", "localhost")
+            {
+                StdInputRedirection = InputRedirection.NullDevice,
+                StdErrorRedirection = OutputRedirection.OutputPipe,
+                StdOutputRedirection = OutputRedirection.OutputPipe,
+            };
+
+            using (var p = ChildProcess.Start(si))
+            {
+                Thread.Sleep(500);
+                // Send Ctrl+C
+                await p.PseudoConsoleInputStream.WriteAsync(new byte[] { 0x03 }, 0, 1);
+                await p.PseudoConsoleInputStream.FlushAsync();
+
+                using (var sr = new StreamReader(p.StandardOutput, Console.OutputEncoding))
+                {
+                    Console.WriteLine(await sr.ReadToEndAsync());
+                }
+                // ExitCode: C000013A
+                // (STATUS_CONTROL_C_EXIT)
+                Console.WriteLine("ExitCode: {0:X8}", p.ExitCode);
+            }
         }
 
         private static async Task BasicAsync()

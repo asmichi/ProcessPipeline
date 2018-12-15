@@ -24,6 +24,9 @@ namespace Asmichi.Utilities.ProcessManagement
         private readonly Stream _standardInput;
         private readonly Stream _standardOutput;
         private readonly Stream _standardError;
+        private readonly SafePseudoConsoleHandle _pseudoConsoleHandle;
+        private readonly Stream _pseudoConsoleOutputStream;
+        private readonly Stream _pseudoConsoleInputStream;
         private bool _isDisposed;
         private bool _hasExitCode;
         private int _exitCode;
@@ -32,12 +35,18 @@ namespace Asmichi.Utilities.ProcessManagement
             SafeProcessHandle processHandle,
             Stream standardInput,
             Stream standardOutput,
-            Stream standardError)
+            Stream standardError,
+            SafePseudoConsoleHandle pseudoConsoleHandle,
+            Stream pseudoConsoleInputStream,
+            Stream pseudoConsoleOutputStream)
         {
             this._processHandle = processHandle;
             this._standardInput = standardInput;
             this._standardOutput = standardOutput;
             this._standardError = standardError;
+            this._pseudoConsoleHandle = pseudoConsoleHandle;
+            this._pseudoConsoleOutputStream = pseudoConsoleOutputStream;
+            this._pseudoConsoleInputStream = pseudoConsoleInputStream;
 
             // In Windows it is easy to get a WaitHandle from a process handle... What about Linux?
             this._waitHandle = new ChildProcessWaitHandle(HandlePal.ToWaitHandle(processHandle));
@@ -55,6 +64,9 @@ namespace Asmichi.Utilities.ProcessManagement
                 _standardInput?.Dispose();
                 _standardOutput?.Dispose();
                 _standardError?.Dispose();
+                _pseudoConsoleHandle?.Dispose();
+                _pseudoConsoleOutputStream?.Dispose();
+                _pseudoConsoleInputStream?.Dispose();
 
                 _isDisposed = true;
             }
@@ -80,6 +92,8 @@ namespace Asmichi.Utilities.ProcessManagement
         /// Otherwise null.
         /// </summary>
         public Stream StandardError => _standardError;
+        public Stream PseudoConsoleOutputStream => _pseudoConsoleOutputStream;
+        public Stream PseudoConsoleInputStream => _pseudoConsoleInputStream;
 
         /// <summary>
         /// Waits indefinitely for the process to exit.

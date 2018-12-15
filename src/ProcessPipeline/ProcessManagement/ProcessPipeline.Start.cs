@@ -77,7 +77,8 @@ namespace Asmichi.Utilities.ProcessManagement
                                 environmentVariables: item.EnvironmentVariables,
                                 stdIn: stdInput,
                                 stdOut: stdOutput,
-                                stdErr: stdError);
+                                stdErr: stdError,
+                                pseudoConsole: stdHandles.PseudoConsoleHandle);
                         }
                         catch (ProcessCreationFailedException)
                         {
@@ -88,7 +89,7 @@ namespace Asmichi.Utilities.ProcessManagement
                     }
 
                     var processPipeline = new ProcessPipeline(entries, stdHandles.InputStream, stdHandles.OutputStream, stdHandles.ErrorStream);
-                    stdHandles.DetachStreams();
+                    stdHandles.DetachHandles();
                     return processPipeline;
                 }
                 catch

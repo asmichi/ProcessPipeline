@@ -47,12 +47,20 @@ namespace Asmichi.Utilities.ProcessManagement
                     environmentVariables: startInfo.EnvironmentVariables,
                     stdIn: stdHandles.PipelineStdIn,
                     stdOut: stdHandles.PipelineStdOut,
-                    stdErr: stdHandles.PipelineStdErr);
+                    stdErr: stdHandles.PipelineStdErr,
+                    pseudoConsole: stdHandles.PseudoConsoleHandle);
 
                 try
                 {
-                    var process = new ChildProcess(processHandle, stdHandles.InputStream, stdHandles.OutputStream, stdHandles.ErrorStream);
-                    stdHandles.DetachStreams();
+                    var process = new ChildProcess(
+                        processHandle,
+                        stdHandles.InputStream,
+                        stdHandles.OutputStream,
+                        stdHandles.ErrorStream,
+                        stdHandles.PseudoConsoleHandle,
+                        stdHandles.PseudoConsoleInputStream,
+                        stdHandles.PseudoConsoleOutputStream);
+                    stdHandles.DetachHandles();
                     return process;
                 }
                 catch
@@ -70,7 +78,8 @@ namespace Asmichi.Utilities.ProcessManagement
             IReadOnlyCollection<(string name, string value)> environmentVariables,
             SafeHandle stdIn,
             SafeHandle stdOut,
-            SafeHandle stdErr)
+            SafeHandle stdErr,
+            SafePseudoConsoleHandle pseudoConsole)
         {
             var commandLine = CommandLineUtil.MakeCommandLine(fileName, arguments ?? Array.Empty<string>());
             var environmentBlock = environmentVariables != null ? EnvironmentBlockUtil.MakeEnvironmentBlockWin32(environmentVariables) : null;
@@ -86,11 +95,13 @@ namespace Asmichi.Utilities.ProcessManagement
 
                 fixed (IntPtr* pInheritableHandles = inheritableHandles)
                 {
-                    using (var attr = new ProcThreadAttributeList(1))
+                    using (var attr = new ProcThreadAttributeList(2))
                     {
                         attr.UpdateHandleList(pInheritableHandles, inheritableHandles.Length);
+                        attr.AttachToPseudoConsole(pseudoConsole);
 
-                        bool createNoWindow = !ConsolePal.HasConsoleWindow();
+                        // Apparently CREATE_NO_WINDOW must not be specifyed when a pseudo console is present.
+                        bool createNoWindow = false; // !ConsolePal.HasConsoleWindow();
                         int creationFlags =
                             Kernel32.CREATE_UNICODE_ENVIRONMENT
                             | Kernel32.EXTENDED_STARTUPINFO_PRESENT
