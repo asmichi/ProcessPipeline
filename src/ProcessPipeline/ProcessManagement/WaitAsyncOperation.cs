@@ -20,7 +20,9 @@ namespace Asmichi.Utilities.ProcessManagement
         {
             lock (this)
             {
-                _completionSource = new TaskCompletionSource<bool>();
+                // For safety, run continuations of _completionSource.Task outside the callback
+                // so they will not block the thread running the callback (especially CTS.Cancel).
+                _completionSource = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 
                 _waitRegistration = ThreadPool.RegisterWaitForSingleObject(
                     waitHandle, CachedWaitForExitCompletedDelegate, this, millisecondsTimeout, executeOnlyOnce: true);
