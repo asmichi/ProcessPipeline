@@ -2,7 +2,7 @@
 
 using System;
 using System.IO;
-using Asmichi.Utilities.Interop;
+using Asmichi.Utilities.PlatformAbstraction;
 using Microsoft.Win32.SafeHandles;
 
 namespace Asmichi.Utilities.ProcessManagement

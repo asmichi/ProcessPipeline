@@ -8,8 +8,8 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
-using Asmichi.Utilities.Interop;
 using Asmichi.Utilities.Interop.Windows;
+using Asmichi.Utilities.PlatformAbstraction;
 using Asmichi.Utilities.Utilities;
 using Microsoft.Win32.SafeHandles;
 

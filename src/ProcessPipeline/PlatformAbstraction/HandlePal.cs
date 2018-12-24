@@ -1,11 +1,10 @@
 ﻿// Copyright 2018 @asmichi (on github). Licensed under the MIT License. See LICENCE in the project root for details.
 
 using System.ComponentModel;
-using System.Runtime.InteropServices;
 using Asmichi.Utilities.Interop.Windows;
 using Microsoft.Win32.SafeHandles;
 
-namespace Asmichi.Utilities.Interop
+namespace Asmichi.Utilities.PlatformAbstraction
 {
     internal static class HandlePal
     {

@@ -10,7 +10,7 @@ using System.Threading;
 using Asmichi.Utilities.Interop.Windows;
 using Microsoft.Win32.SafeHandles;
 
-namespace Asmichi.Utilities.Interop
+namespace Asmichi.Utilities.PlatformAbstraction
 {
     internal static class FilePal
     {

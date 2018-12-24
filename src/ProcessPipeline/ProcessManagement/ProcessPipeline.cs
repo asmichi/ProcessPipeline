@@ -6,8 +6,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Asmichi.Utilities.Interop;
 using Asmichi.Utilities.Interop.Windows;
+using Asmichi.Utilities.PlatformAbstraction;
 using Asmichi.Utilities.Utilities;
 using Microsoft.Win32.SafeHandles;
 
