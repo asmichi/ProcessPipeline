@@ -1,10 +1,8 @@
 ﻿// Copyright 2018 @asmichi (on github). Licensed under the MIT License. See LICENCE in the project root for details.
 
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
-namespace Asmichi.Utilities.Utilities
+namespace Asmichi.Utilities.PlatformAbstraction.Windows
 {
     public class EnvironmentBlockUtilTest
     {

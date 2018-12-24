@@ -70,7 +70,7 @@ namespace Asmichi.Utilities.ProcessManagement
 
                         try
                         {
-                            entries[index].ProcessHandle = ChildProcess.Start(
+                            entries[index].ProcessHandle = ProcessPal.SpawnProcess(
                                 fileName: item.FileName,
                                 arguments: item.Arguments,
                                 workingDirectory: item.WorkingDirectory,

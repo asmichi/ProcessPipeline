@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Asmichi.Utilities.Utilities
+namespace Asmichi.Utilities.PlatformAbstraction.Windows
 {
     internal static class EnvironmentBlockUtil
     {
