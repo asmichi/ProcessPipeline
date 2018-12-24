@@ -4,9 +4,9 @@ using System.ComponentModel;
 using Asmichi.Utilities.Interop.Windows;
 using Microsoft.Win32.SafeHandles;
 
-namespace Asmichi.Utilities.PlatformAbstraction
+namespace Asmichi.Utilities.PlatformAbstraction.Windows
 {
-    internal static class HandlePal
+    internal static class HandlePalWindows
     {
         public static SafeWaitHandle ToWaitHandle(SafeProcessHandle handle)
         {

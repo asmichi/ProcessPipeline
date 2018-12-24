@@ -10,9 +10,9 @@ using System.Threading;
 using Asmichi.Utilities.Interop.Windows;
 using Microsoft.Win32.SafeHandles;
 
-namespace Asmichi.Utilities.PlatformAbstraction
+namespace Asmichi.Utilities.PlatformAbstraction.Windows
 {
-    internal static class FilePal
+    internal static class FilePalWindows
     {
         private const string NullDeviceFileName = "NUL";
         private static int pipeSerialNumber;
@@ -60,13 +60,6 @@ namespace Asmichi.Utilities.PlatformAbstraction
             return (readPipe, writePipe);
         }
 
-        /// <summary>
-        /// Creates a pipe pair. Overlapped mode is enabled for the server side.
-        /// If <paramref name="pipeDirection"/> is <see cref="PipeDirection.In"/>, clientPipe is created with Overlapped mode enabled.
-        /// If <see cref="PipeDirection.Out"/>, serverStream is created with Overlapped mode enabled.
-        /// </summary>
-        /// <param name="pipeDirection">Specifies which side is the server side.</param>
-        /// <returns>A pipe pair.</returns>
         public static (Stream serverStream, SafeFileHandle clientPipe) CreatePipePairWithAsyncServerSide(PipeDirection pipeDirection)
         {
             var (serverMode, clientMode) = ToModes(pipeDirection);

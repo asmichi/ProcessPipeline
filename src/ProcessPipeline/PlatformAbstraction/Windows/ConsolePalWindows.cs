@@ -4,9 +4,9 @@ using System;
 using Asmichi.Utilities.Interop.Windows;
 using Microsoft.Win32.SafeHandles;
 
-namespace Asmichi.Utilities.PlatformAbstraction
+namespace Asmichi.Utilities.PlatformAbstraction.Windows
 {
-    internal static class ConsolePal
+    internal static class ConsolePalWindows
     {
         public static SafeFileHandle GetStdInputHandleForChild() => GetStdHandleForChild(Kernel32.STD_INPUT_HANDLE);
         public static SafeFileHandle GetStdOutputHandleForChild() => GetStdHandleForChild(Kernel32.STD_OUTPUT_HANDLE);
