@@ -37,16 +37,29 @@ Runtimes:
 
 - `win10-x86` or later (Desktop)
 - `win10-x64` or later (Desktop)
+- `linux-x64`
+    - GLIBC 2.x.y or later
 
-`linux-x64` support is planned but not implemented.
 
 # Notes
 
 - When overriding environment variables, it is recommended that you include basic environment variables such as `SystemRoot`, etc.
 
+# Implementation Assumptions
+
+This library assumes that the implementation of the underlying runtime has the following characteristics:
+
+- Windows
+    - The inner value of a `SafeFileHandle` is a file handle.
+    - The inner value of a `SafeWaitHandle` is a handle that `WaitForSingleObject` can wait for.
+    - The inner value of a `SafeProcessHandle` is a process handle.
+- *nix
+    - The inner value of a `SafeFileHandle` is a file descriptor.
+    - The inner value of a `SafeProcessHandle` is a process id.
+
 # Examples
 
-See [ProcessPipeline.Example](src/ProcessPipeline.Example/) (not yet) for more examples.
+See [ProcessPipeline.Example](src/ProcessPipeline.Example/) for more examples.
 
 ## Basic
 

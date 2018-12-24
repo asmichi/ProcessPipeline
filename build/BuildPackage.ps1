@@ -12,21 +12,8 @@ $ErrorActionPreference = "Stop"
 
 Import-Module "$PSScriptRoot\psm\Build.psm1"
 
-function Exec {
-    param(
-        [parameter(Mandatory = $true)]
-        [scriptblock]
-        $cmd
-    )
-
-    & $cmd
-
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error "Command failed with exit code ${LASTEXITCODE}: $cmd"
-    }
-}
-
 $worktreeRoot = Resolve-Path "$PSScriptRoot\.."
+. $worktreeRoot\Build\Common.ps1
 $slnFile = "$worktreeRoot\src\ProcessPipeline.sln"
 
 $commitHash = (git rev-parse HEAD)
