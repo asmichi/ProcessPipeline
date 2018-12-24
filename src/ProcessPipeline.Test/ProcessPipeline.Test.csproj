@@ -40,9 +40,9 @@
 
   <Target Name="AfterBuild">
     <ItemGroup>
-      <TestChildBin Include="$(BinDir)TestChild\AnyCPU\$(ConfigurationName)\netcoreapp2.1\TestChild.*"/>
+      <TestChildBin Include="$(BinDir)TestChild\AnyCPU\$(ConfigurationName)\netcoreapp2.1\TestChild.*" />
     </ItemGroup>
-    <Copy SourceFiles="@(TestChildBin)" DestinationFolder="$(TargetDir)"/>
+    <Copy SourceFiles="@(TestChildBin)" DestinationFolder="$(TargetDir)" />
   </Target>
 
 </Project>
