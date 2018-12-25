@@ -28,6 +28,9 @@ namespace Asmichi.Utilities.PlatformAbstraction.Windows
             // backslashes in a quoted part (no need for escape)
             Assert(@"'c m\d' '1 2\3'", @"c m\d", @"1 2\3");
 
+            // trailing backslash in a quoted part.
+            Assert(@"'c md\\' '1 23\\'", @"c md\", @"1 23\");
+
             // backslashes followed by a double quote
             Assert(@"'cmd\\\'' '123\\\''", @"cmd\'", @"123\'");
             Assert(@"'cmd\\\\\'' '123\\\\\''", @"cmd\\'", @"123\\'");

@@ -71,6 +71,8 @@ namespace Asmichi.Utilities.PlatformAbstraction.Windows
                             // Iff backslashes are followed by a double-quote, those backslashes will be parsed as escape characters of the double-quote.
                             // Escape the backslashes.
                             sb.Append('\\', backslashCount);
+                            backslashCount = 0;
+
                             // Escape the double-quote.
                             sb.Append("\\\""); // "\"\"" will be also valid here.
                             break;
@@ -83,6 +85,9 @@ namespace Asmichi.Utilities.PlatformAbstraction.Windows
                         }
                 }
             }
+
+            // Escape trailing backslashes.
+            sb.Append('\\', backslashCount);
 
             sb.Append("\"");
         }
