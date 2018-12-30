@@ -1,0 +1,73 @@
+resources:
+- repo: self
+# Needs .NET Framework SDK 4.6.1 and 4.7.1. 
+queue:
+  name: Hosted VS2017
+variables:
+  SolutionFile: 'src/ProcessPipeline.sln'
+steps:
+- task: DotNetCoreInstaller@0
+  displayName: 'Use .NET Core sdk 2.2.101'
+  inputs:
+    version: 2.2.101
+
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: restore
+
+    projects: '$(SolutionFile)'
+
+    verbosityRestore: Quiet
+
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  inputs:
+    projects: '$(SolutionFile)'
+
+    arguments: '$(CommonBuildOptions)'
+
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet test'
+  inputs:
+    command: test
+
+    projects: src/ProcessPipeline.Test/ProcessPipeline.Test.csproj
+
+    arguments: '$(CommonBuildOptions)'
+
+
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 4.9.2'
+  inputs:
+    versionSpec: 4.9.2
+
+
+- task: NuGetCommand@2
+  displayName: 'NuGet custom'
+  inputs:
+    command: custom
+
+    arguments: 'pack -Verbosity quiet -ForceEnglishOutput -Version $(PackageVersion) -BasePath bin/ProcessPipeline/AnyCPU/Release -OutputDirectory bin/nupkg -Properties commitHash=$(Build.SourceVersion) build/nuspec/Asmichi.ProcessPipeline.nuspec'
+
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+
+    Contents: 'bin/nupkg/*'
+
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+
+
+
