@@ -49,14 +49,8 @@ $commonBuildOptions = @("-nologo",
 )
 
 Exec { dotnet restore --verbosity:quiet $slnFile }
-
-# The ProjectDependency to TestChild in the sln will have ProcessPipeline.Test
-# build TestChild with TargetFramework set to netcoreapp2.1 and fail...
-# Build projects separately.
-Exec { dotnet build $commonBuildOptions "$worktreeRoot\src\TestChild" }
-Exec { dotnet test $commonBuildOptions "$worktreeRoot\src\ProcessPipeline.Test" }
-
-Exec { dotnet build $commonBuildOptions --no-incremental "$worktreeRoot\src\ProcessPipeline" }
+Exec { dotnet build $commonBuildOptions $slnFile }
+Exec { dotnet test $commonBuildOptions "$worktreeRoot\src\ProcessPipeline.Test\ProcessPipeline.Test.csproj" }
 
 Exec {
     nuget pack `
