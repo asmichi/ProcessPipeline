@@ -5,6 +5,7 @@
     <AssemblyName>Asmichi.Utilities.ProcessPipeline</AssemblyName>
     <CodeAnalysisRuleSet>..\PublicAssembly.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>$(OutDir)$(AssemblyName).xml</DocumentationFile>
+    <Platforms>AnyCPU</Platforms>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>Asmichi.Utilities</RootNamespace>
     <!-- As a workaround for the netstandard 2.0 facade hell, also target net471. https://github.com/dotnet/standard/issues/860 -->
