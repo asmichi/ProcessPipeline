@@ -6,7 +6,7 @@
     <authors>asmichi</authors>
     <owners>asmichi</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <licenseUrl>https://raw.githubusercontent.com/asmichi/ProcessPipeline/master/LICENSE</licenseUrl>
+    <license type="expression">MIT</license>
     <projectUrl>https://github.com/asmichi/ProcessPipeline</projectUrl>
     <description>A .NET library for creating child processes and child process pipelines. Easier, less error-prone, more flexible than `System.Diagnostics.Process`.</description>
     <releaseNotes/>
