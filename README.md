@@ -3,6 +3,8 @@ A .NET library for creating child processes and child process pipelines. Easier,
 
 This library can be obtained via [NuGet](https://www.nuget.org/packages/Asmichi.ProcessPipeline/).
 
+[![Build Status](https://dev.azure.com/asmichi/ProcessPipeline/_apis/build/status/ProcessPipeline-CI?branchName=master)](https://dev.azure.com/asmichi/ProcessPipeline/_build/latest?definitionId=2&branchName=master)
+
 ## Comparison with `System.Diagnostics.Process`
 
 - Concentrates on creating a child process and obtaining its output.
