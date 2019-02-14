@@ -18,7 +18,6 @@ pr:
 variables:
   SolutionFile: 'src/ProcessPipeline.sln'
   CommonBuildOptions: '-nologo --verbosity:quiet -p:Platform=AnyCPU --configuration Release'
-  PackageVersion: '0.4.0'
 
 jobs:
 - job: build
