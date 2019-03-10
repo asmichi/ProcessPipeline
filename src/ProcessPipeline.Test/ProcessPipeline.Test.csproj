@@ -9,7 +9,7 @@
     <Platforms>AnyCPU</Platforms>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>Asmichi.Utilities</RootNamespace>
-    <TargetFrameworks>net471;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net471;net472;netcoreapp2.1</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>

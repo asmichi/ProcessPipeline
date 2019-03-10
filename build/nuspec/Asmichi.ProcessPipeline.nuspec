@@ -14,19 +14,18 @@
     <tags>win32 process</tags>
     <repository type="git" url="https://github.com/asmichi/ProcessPipeline" commit="$commitHash$"/>
     <dependencies>
-      <group targetFramework=".NETFramework4.6.1">
-        <dependency id="System.Memory" version="4.5.1" exclude="Build,Analyzers" />
-        <dependency id="System.ValueTuple" version="4.5.0" exclude="Build,Analyzers" />
-      </group>
       <group targetFramework=".NETFramework4.7.1">
+        <dependency id="System.Memory" version="4.5.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework4.7.2">
         <dependency id="System.Memory" version="4.5.1" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETCoreApp2.1" />
     </dependencies>
   </metadata>
   <files>
-    <file src="net461\Asmichi.Utilities.ProcessPipeline.*" target="lib\net461\" />
     <file src="net471\Asmichi.Utilities.ProcessPipeline.*" target="lib\net471\" />
+    <file src="net472\Asmichi.Utilities.ProcessPipeline.*" target="lib\net472\" />
     <file src="netcoreapp2.1\Asmichi.Utilities.ProcessPipeline.*" target="lib\netcoreapp2.1\" />
   </files>
 </package>

@@ -8,8 +8,8 @@
     <Platforms>AnyCPU</Platforms>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>Asmichi.Utilities</RootNamespace>
-    <!-- As a workaround for the netstandard 2.0 facade hell, also target net471. https://github.com/dotnet/standard/issues/860 -->
-    <TargetFrameworks>net461;net471;netcoreapp2.1</TargetFrameworks>
+    <!-- As a workaround for the netstandard 2.0 facade hell, also target net472. https://github.com/dotnet/standard/issues/860 -->
+    <TargetFrameworks>net471;net472;netcoreapp2.1</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,12 +26,11 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net471'">
     <PackageReference Include="System.Memory" Version="4.5.1" />
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net471'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <PackageReference Include="System.Memory" Version="4.5.1" />
   </ItemGroup>
 

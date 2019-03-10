@@ -4,7 +4,7 @@
 
 - Windows 10 1809
     - .NET Core SDK 2.2.101
-    - .NET Framework SDKs and Targeting Packs: 4.6.1, 4.7.1, 4.7.2
+    - .NET Framework SDKs and Targeting Packs: 4.7.1, 4.7.2
     - nuget.exe 4.9.2 or later
 
 - Ubuntu 18.04
