@@ -82,6 +82,11 @@ namespace Asmichi.Utilities.ProcessManagement
         public Stream StandardError => _standardError;
 
         /// <summary>
+        /// (For tests.) Tests use this to wait for the child process without caching its status.
+        /// </summary>
+        internal WaitHandle WaitHandle => _waitHandle;
+
+        /// <summary>
         /// Waits indefinitely for the process to exit.
         /// </summary>
         public void WaitForExit() => WaitForExit(Timeout.Infinite);

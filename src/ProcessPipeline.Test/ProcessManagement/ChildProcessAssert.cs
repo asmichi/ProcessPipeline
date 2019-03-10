@@ -60,7 +60,7 @@ namespace Asmichi.Utilities.ProcessManagement
         }
 
         // Input: EchoBack process
-        public static async Task CanCancelWaitForExitAsync(IChildProcess sut)
+        public static async Task CanCancelWaitForExitAsync(IChildProcess sut, Action rawWaitForExit)
         {
             Assert.False(await sut.WaitForExitAsync(0));
 
@@ -72,7 +72,7 @@ namespace Asmichi.Utilities.ProcessManagement
             }
 
             sut.StandardInput.Close();
-            Thread.Sleep(100);
+            rawWaitForExit();
 
             // If the process has already exited, returns true instead of returning CanceledTask.
             using (var cts = new CancellationTokenSource())

@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -103,7 +104,9 @@ namespace Asmichi.Utilities.ProcessManagement
         {
             using (var sut = CreateForWaitForExitTest())
             {
-                await ChildProcessAssert.CanCancelWaitForExitAsync(sut);
+                await ChildProcessAssert.CanCancelWaitForExitAsync(
+                    sut,
+                    () => sut.WaitHandle.WaitOne());
             }
         }
 
