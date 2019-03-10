@@ -3,13 +3,13 @@
 ## Author's Environments
 
 - Windows 10 1809
-    - .NET Core SDK 2.2.101
+    - .NET Core SDK 2.2.104
     - .NET Framework SDKs and Targeting Packs: 4.7.1, 4.7.2
     - nuget.exe 4.9.2 or later
 
 - Ubuntu 18.04
     - `apt-get install make gcc`
-    - .NET Core SDK 2.2.101
+    - .NET Core SDK 2.2.104
         - See https://www.microsoft.com/net/download/linux-package-manager/ubuntu18-04/sdk-current for installation instructions.
 
 ## Writing and Testing code
