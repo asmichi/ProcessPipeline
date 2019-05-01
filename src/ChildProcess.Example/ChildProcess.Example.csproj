@@ -3,7 +3,7 @@
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
-    <AssemblyName>ProcessPipeline.Example</AssemblyName>
+    <AssemblyName>ChildProcess.Example</AssemblyName>
     <CodeAnalysisRuleSet>..\PrivateAssembly.ruleset</CodeAnalysisRuleSet>
     <OutputType>Exe</OutputType>
     <Platforms>AnyCPU</Platforms>
@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProcessPipeline\ProcessPipeline.csproj" />
+    <ProjectReference Include="..\ChildProcess\ChildProcess.csproj" />
   </ItemGroup>
 
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />

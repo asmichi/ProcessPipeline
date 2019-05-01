@@ -27,7 +27,7 @@ function Exec {
 }
 
 $worktreeRoot = Resolve-Path "$PSScriptRoot\.."
-$slnFile = "$worktreeRoot\src\ProcessPipeline.sln"
+$slnFile = "$worktreeRoot\src\ChildProcess.sln"
 
 $commitHash = (git rev-parse HEAD)
 $versionInfo = Get-VersionInfo -CommitHash $commitHash -RetailRelease:$RetailRelease
@@ -36,14 +36,14 @@ $commonBuildOptions = Get-CommonBuildOptions -VersionInfo $versionInfo
 
 Exec { dotnet restore --verbosity:quiet $slnFile }
 Exec { dotnet build @commonBuildOptions $slnFile }
-Exec { dotnet test @commonBuildOptions "$worktreeRoot\src\ProcessPipeline.Test\ProcessPipeline.Test.csproj" }
+Exec { dotnet test @commonBuildOptions "$worktreeRoot\src\ChildProcess.Test\ChildProcess.Test.csproj" }
 
 Exec {
     nuget pack `
         -Verbosity quiet -ForceEnglishOutput `
         -Version $($versionInfo.PackageVersion) `
-        -BasePath "$worktreeRoot\bin\ProcessPipeline\AnyCPU\Release" `
+        -BasePath "$worktreeRoot\bin\ChildProcess\AnyCPU\Release" `
         -OutputDirectory "$worktreeRoot\bin\nupkg" `
         -Properties commitHash=$($versionInfo.CommitHash) `
-        "$worktreeRoot\build\nuspec\Asmichi.ProcessPipeline.nuspec"
+        "$worktreeRoot\build\nuspec\Asmichi.ChildProcess.nuspec"
 }

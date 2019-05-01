@@ -1,4 +1,4 @@
-# Building Asmichi.ProcessPipeline
+# Building Asmichi.ChildProcess
 
 ## Author's Environments
 
@@ -16,7 +16,7 @@
 
 ### Windows Version
 
-Just open src/ProcessPipeline.sln.
+Just open src/ChildProcess.sln.
 
 ### Linux Version
 

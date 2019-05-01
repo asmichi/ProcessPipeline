@@ -2,4 +2,4 @@
 
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Asmichi.Utilities.ProcessPipeline.Test")]
+[assembly: InternalsVisibleTo("Asmichi.Utilities.ChildProcess.Test")]

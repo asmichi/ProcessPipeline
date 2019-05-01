@@ -3,7 +3,7 @@
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 
   <PropertyGroup>
-    <AssemblyName>Asmichi.Utilities.ProcessPipeline.Test</AssemblyName>
+    <AssemblyName>Asmichi.Utilities.ChildProcess.Test</AssemblyName>
     <CodeAnalysisRuleSet>..\PrivateAssembly.ruleset</CodeAnalysisRuleSet>
     <IsPackable>false</IsPackable>
     <Platforms>AnyCPU</Platforms>
@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProcessPipeline\ProcessPipeline.csproj" />
+    <ProjectReference Include="..\ChildProcess\ChildProcess.csproj" />
   </ItemGroup>
 
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />

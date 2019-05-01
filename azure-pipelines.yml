@@ -16,7 +16,7 @@ pr:
     - release/*
 
 variables:
-  SolutionFile: 'src/ProcessPipeline.sln'
+  SolutionFile: 'src/ChildProcess.sln'
 
 jobs:
 - job: build
@@ -56,7 +56,7 @@ jobs:
     displayName: 'dotnet test'
     inputs:
       command: test
-      projects: src/ProcessPipeline.Test/ProcessPipeline.Test.csproj
+      projects: src/ChildProcess.Test/ChildProcess.Test.csproj
       arguments: '$(CommonBuildOptions)'
 
   - task: NuGetToolInstaller@0
@@ -68,7 +68,7 @@ jobs:
     displayName: 'NuGet custom'
     inputs:
       command: custom
-      arguments: 'pack -Verbosity quiet -ForceEnglishOutput -Version $(PackageVersion) -BasePath bin/ProcessPipeline/AnyCPU/Release -OutputDirectory bin/nupkg -Properties commitHash=$(Build.SourceVersion) build/nuspec/Asmichi.ProcessPipeline.nuspec'
+      arguments: 'pack -Verbosity quiet -ForceEnglishOutput -Version $(PackageVersion) -BasePath bin/ChildProcess/AnyCPU/Release -OutputDirectory bin/nupkg -Properties commitHash=$(Build.SourceVersion) build/nuspec/Asmichi.ChildProcess.nuspec'
 
   - task: CopyFiles@2
     displayName: 'Copy Files to: $(build.artifactstagingdirectory)'

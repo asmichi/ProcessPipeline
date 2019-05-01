@@ -1,9 +1,9 @@
-# Asmichi.ProcessPipeline
+# Asmichi.ChildProcess
 A .NET library that provides functionality for creating child processes. Easier, less error-prone, more flexible than `System.Diagnostics.Process` at creating child processes.
 
-This library can be obtained via [NuGet](https://www.nuget.org/packages/Asmichi.ProcessPipeline/).
+This library can be obtained via [NuGet](https://www.nuget.org/packages/Asmichi.ChildProcess/).
 
-[![Build Status](https://dev.azure.com/asmichi/ProcessPipeline/_apis/build/status/ProcessPipeline-CI?branchName=master)](https://dev.azure.com/asmichi/ProcessPipeline/_build/latest?definitionId=2&branchName=master)
+[![Build Status](https://dev.azure.com/asmichi/ChildProcess/_apis/build/status/ChildProcess-CI?branchName=master)](https://dev.azure.com/asmichi/ChildProcess/_build/latest?definitionId=2&branchName=master)
 
 ## Comparison with `System.Diagnostics.Process`
 
@@ -46,7 +46,7 @@ Runtimes:
 
 # Examples
 
-See [ProcessPipeline.Example](src/ProcessPipeline.Example/) (not yet) for more examples.
+See [ChildProcess.Example](src/ChildProcess.Example/) (not yet) for more examples.
 
 ## Basic
 

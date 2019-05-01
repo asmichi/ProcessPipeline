@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="ProcessPipeline.NET Ruleset" Description="Ruleset for ProcessPipeline.NET." ToolsVersion="12.0">
+<RuleSet Name="Asmichi.ChildProcess Ruleset" Description="Ruleset for Asmichi.ChildProcess." ToolsVersion="12.0">
   <Include Path="PublicAssembly.ruleset" Action="Default" />
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
     <Rule Id="SA0001" Action="None" />

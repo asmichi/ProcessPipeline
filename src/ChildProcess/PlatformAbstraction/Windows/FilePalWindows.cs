@@ -70,7 +70,7 @@ namespace Asmichi.Utilities.PlatformAbstraction.Windows
                 var thisPipeSerialNumber = Interlocked.Increment(ref pipeSerialNumber);
                 var pipeName = string.Format(
                     CultureInfo.InvariantCulture,
-                    @"\\.\pipe\Asmichi.ProcessPipeline.7785FB5A-AB05-42B2-BC02-A14769CC463E.{0}.{1}",
+                    @"\\.\pipe\Asmichi.ChildProcess.7785FB5A-AB05-42B2-BC02-A14769CC463E.{0}.{1}",
                     Kernel32.GetCurrentProcessId(),
                     thisPipeSerialNumber);
 
