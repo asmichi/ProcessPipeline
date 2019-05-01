@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ChildProcess\ChildProcess.csproj" />
+    <!-- Avoid ProjectReference to TestChild as a workaround for https://github.com/Microsoft/msbuild/issues/2661. -->
   </ItemGroup>
 
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
