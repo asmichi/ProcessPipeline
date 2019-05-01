@@ -87,25 +87,3 @@ using (var p = ChildProcess.Start(si))
 // ...
 Console.WriteLine(File.ReadAllText("env.txt"));
 ```
-
-## Process Pipeline
-
-```cs
-var si = new ProcessPipelineStartInfo()
-{
-    StdOutputRedirection = OutputRedirection.File,
-    StdOutputFile = "env.txt"
-};
-si.Add("cmd", "/C", "set");
-si.Add("findstr", "PROCESSOR");
-
-using (var p = ProcessPipeline.Start(si))
-{
-    await p.WaitForExitAsync();
-}
-
-// NUMBER_OF_PROCESSORS=16
-// PROCESSOR_ARCHITECTURE = AMD64
-// ...
-Console.WriteLine(File.ReadAllText("env.txt"));
-```
