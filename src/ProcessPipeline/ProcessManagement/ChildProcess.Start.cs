@@ -29,16 +29,7 @@ namespace Asmichi.Utilities.ProcessManagement
         {
             startInfo = startInfo ?? throw new ArgumentNullException(nameof(startInfo));
 
-            using (var stdHandles = new PipelineStdHandleCreator(
-                startInfo.StdInputRedirection,
-                startInfo.StdOutputRedirection,
-                startInfo.StdErrorRedirection,
-                startInfo.StdInputFile,
-                startInfo.StdOutputFile,
-                startInfo.StdErrorFile,
-                startInfo.StdInputHandle,
-                startInfo.StdOutputHandle,
-                startInfo.StdErrorHandle))
+            using (var stdHandles = new PipelineStdHandleCreator(startInfo))
             {
                 var processHandle = ProcessPal.SpawnProcess(
                     fileName: startInfo.FileName,

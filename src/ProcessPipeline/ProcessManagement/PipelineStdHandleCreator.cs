@@ -19,17 +19,18 @@ namespace Asmichi.Utilities.ProcessManagement
         private List<IDisposable> _objectsToDispose;
         private bool _isDisposed;
 
-        public PipelineStdHandleCreator(
-            InputRedirection stdInputRedirection,
-            OutputRedirection stdOutputRedirection,
-            OutputRedirection stdErrorRedirection,
-            string stdInputFile,
-            string stdOutputFile,
-            string stdErrorFile,
-            SafeFileHandle stdInputHandle,
-            SafeFileHandle stdOutputHandle,
-            SafeFileHandle stdErrorHandle)
+        public PipelineStdHandleCreator(ChildProcessStartInfo startInfo)
         {
+            var stdInputRedirection = startInfo.StdInputRedirection;
+            var stdOutputRedirection = startInfo.StdOutputRedirection;
+            var stdErrorRedirection = startInfo.StdErrorRedirection;
+            var stdInputFile = startInfo.StdInputFile;
+            var stdOutputFile = startInfo.StdOutputFile;
+            var stdErrorFile = startInfo.StdErrorFile;
+            var stdInputHandle = startInfo.StdInputHandle;
+            var stdOutputHandle = startInfo.StdOutputHandle;
+            var stdErrorHandle = startInfo.StdErrorHandle;
+
             if (stdInputRedirection == InputRedirection.Handle && stdInputHandle == null)
             {
                 throw new ArgumentNullException(nameof(ChildProcessStartInfo.StdInputHandle));
