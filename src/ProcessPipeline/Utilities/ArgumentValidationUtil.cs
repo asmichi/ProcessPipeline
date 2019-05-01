@@ -12,7 +12,7 @@ namespace Asmichi.Utilities.Utilities
             if (millisecondsTimeout < Timeout.Infinite)
             {
                 throw new ArgumentOutOfRangeException(
-                    "Timeout must be Timeout.Infinite or a non-negative integer.", nameof(millisecondsTimeout));
+                    nameof(millisecondsTimeout), "Timeout must be Timeout.Infinite or a non-negative integer.");
             }
         }
     }

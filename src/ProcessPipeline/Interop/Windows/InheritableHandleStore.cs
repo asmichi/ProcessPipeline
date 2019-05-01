@@ -80,7 +80,7 @@ namespace Asmichi.Utilities.Interop.Windows
             return inheritableHandle;
         }
 
-        private SafeHandle DuplicateIfUninheritable(SafeHandle handle)
+        private static SafeHandle DuplicateIfUninheritable(SafeHandle handle)
         {
             if (!Kernel32.GetHandleInformation(handle, out int flags))
             {

@@ -1,6 +1,7 @@
 // Copyright (c) @asmichi (https://github.com/asmichi). Licensed under the MIT License. See LICENCE in the project root for details.
 
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 
@@ -39,7 +40,7 @@ namespace Asmichi.Utilities
 
         private static int CommandExitCode(string[] args)
         {
-            return int.Parse(args[1]);
+            return int.Parse(args[1], CultureInfo.InvariantCulture);
         }
 
         private static int CommandEchoOutAndError()
@@ -59,7 +60,7 @@ namespace Asmichi.Utilities
 
         private static int CommandSleep(string[] args)
         {
-            int duration = int.Parse(args[1]);
+            int duration = int.Parse(args[1], CultureInfo.InvariantCulture);
             Thread.Sleep(duration);
             return 0;
         }

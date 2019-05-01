@@ -33,27 +33,27 @@ namespace Asmichi.Utilities.ProcessManagement
 
             if (stdInputRedirection == InputRedirection.Handle && stdInputHandle == null)
             {
-                throw new ArgumentNullException(nameof(ChildProcessStartInfo.StdInputHandle));
+                throw new ArgumentNullException(nameof(startInfo), "ChildProcessStartInfo.StdInputHandle must not be null.");
             }
             if (stdInputRedirection == InputRedirection.File && stdInputFile == null)
             {
-                throw new ArgumentNullException(nameof(ChildProcessStartInfo.StdInputFile));
+                throw new ArgumentNullException(nameof(startInfo), "ChildProcessStartInfo.StdInputFile must not be null.");
             }
             if (stdOutputRedirection == OutputRedirection.Handle && stdOutputHandle == null)
             {
-                throw new ArgumentNullException(nameof(ChildProcessStartInfo.StdOutputHandle));
+                throw new ArgumentNullException(nameof(startInfo), "ChildProcessStartInfo.StdOutputHandle must not be null.");
             }
             if (IsFileRedirection(stdOutputRedirection) && stdOutputFile == null)
             {
-                throw new ArgumentNullException(nameof(ChildProcessStartInfo.StdOutputFile));
+                throw new ArgumentNullException(nameof(startInfo), "ChildProcessStartInfo.StdOutputFile must not be null.");
             }
             if (stdErrorRedirection == OutputRedirection.Handle && stdErrorHandle == null)
             {
-                throw new ArgumentNullException(nameof(ChildProcessStartInfo.StdErrorHandle));
+                throw new ArgumentNullException(nameof(startInfo), "ChildProcessStartInfo.StdErrorHandle must not be null.");
             }
             if (IsFileRedirection(stdErrorRedirection) && stdErrorFile == null)
             {
-                throw new ArgumentNullException(nameof(ChildProcessStartInfo.StdErrorFile));
+                throw new ArgumentNullException(nameof(startInfo), "ChildProcessStartInfo.StdErrorFile must not be null.");
             }
 
             bool redirectingToSameFile = IsFileRedirection(stdOutputRedirection) && IsFileRedirection(stdErrorRedirection) && stdOutputFile == stdErrorFile;
@@ -61,7 +61,7 @@ namespace Asmichi.Utilities.ProcessManagement
             {
                 throw new ArgumentException(
                     "StdOutputRedirection and StdErrorRedirection must be the same value when both stdout and stderr redirect to the same file.",
-                    nameof(ChildProcessStartInfo.StdErrorRedirection));
+                    nameof(startInfo));
             }
 
             try
