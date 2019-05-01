@@ -1,4 +1,5 @@
-﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project>
+
   <!-- Directories -->
   <PropertyGroup>
     <!-- One central intermediate directory. MSBuildProjectName to keep intermediate directories from being shared across multiple projects. -->

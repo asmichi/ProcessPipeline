@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="ProcessPipeline.NET Ruleset" Description="Ruleset for ProcessPipeline.NET." ToolsVersion="15.0">
+<RuleSet Name="ProcessPipeline.NET Ruleset" Description="Ruleset for ProcessPipeline.NET." ToolsVersion="12.0">
   <Include Path="MinimumRecommendedRules.ruleset" Action="Default" />
   <Include Path="SecurityRules.ruleset" Action="Default" />
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
