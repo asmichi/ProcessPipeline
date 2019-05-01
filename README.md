@@ -1,3 +1,6 @@
+Visit https://github.com/asmichi/ChildProcess for the current development.
+This repository has been archived as a reference for a ProcessPipeline implementation.
+
 # Asmichi.ProcessPipeline
 A .NET library that provides functionality for creating child processes. Easier, less error-prone, more flexible than `System.Diagnostics.Process` at creating child processes.
 
