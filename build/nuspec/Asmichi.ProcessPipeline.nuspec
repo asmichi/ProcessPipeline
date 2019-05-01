@@ -8,7 +8,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/asmichi/ProcessPipeline</projectUrl>
-    <description>A .NET library for creating child processes and child process pipelines. Easier, less error-prone, more flexible than `System.Diagnostics.Process`.</description>
+    <description>A .NET library that provides functionality for creating child processes. Easier, less error-prone, more flexible than `System.Diagnostics.Process` at creating child processes.</description>
     <releaseNotes/>
     <copyright>Copyright (c) @asmichi (https://github.com/asmichi)</copyright>
     <tags>win32 process</tags>
