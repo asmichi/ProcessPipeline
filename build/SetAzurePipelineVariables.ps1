@@ -1,5 +1,5 @@
 
-# Copyright 2018 @asmichi (on github). Licensed under the MIT License. See LICENCE in the project root for details.
+# Copyright (c) @asmichi (https://github.com/asmichi). Licensed under the MIT License. See LICENCE in the project root for details.
 
 Set-StrictMode -Version latest
 
