@@ -10,6 +10,8 @@ param(
 Set-StrictMode -Version latest
 $ErrorActionPreference = "Stop"
 
+Import-Module "$PSScriptRoot\psm\Build.psm1"
+
 function Exec {
     param(
         [parameter(Mandatory = $true)]
@@ -28,36 +30,20 @@ $worktreeRoot = Resolve-Path "$PSScriptRoot\.."
 $slnFile = "$worktreeRoot\src\ProcessPipeline.sln"
 
 $commitHash = (git rev-parse HEAD)
-$shortCommitHash = $commitHash.Substring(0, 10)
-$commitCount = (git rev-list --count HEAD)
-$baseVersion = Get-Content "$worktreeRoot\build\Version.txt"
-$assemblyVersion = "$baseVersion.0"
-$fileVersion = $assemblyVersion
-$informationalVersion = "$fileVersion+g$shortCommitHash"
-$packageVersion = if ($RetailRelease) { $baseVersion } else { "$baseVersion-pre.$commitCount+g$shortCommitHash" }
+$versionInfo = Get-VersionInfo -CommitHash $commitHash -RetailRelease:$RetailRelease
 
-$commonBuildOptions = @("-nologo",
-    "--verbosity:quiet",
-    "-p:Platform=AnyCPU",
-    "--configuration",
-    "Release",
-    "-p:Version=$assemblyVersion",
-    "-p:PackageVersion=$packageVersion",
-    "-p:FileVersion=$fileVersion",
-    "-p:AssemblyVersion=$assemblyVersion",
-    "-p:InformationalVersion=$informationalVersion"
-)
+$commonBuildOptions = Get-CommonBuildOptions -VersionInfo $versionInfo
 
 Exec { dotnet restore --verbosity:quiet $slnFile }
-Exec { dotnet build $commonBuildOptions $slnFile }
-Exec { dotnet test $commonBuildOptions "$worktreeRoot\src\ProcessPipeline.Test\ProcessPipeline.Test.csproj" }
+Exec { dotnet build @commonBuildOptions $slnFile }
+Exec { dotnet test @commonBuildOptions "$worktreeRoot\src\ProcessPipeline.Test\ProcessPipeline.Test.csproj" }
 
 Exec {
     nuget pack `
         -Verbosity quiet -ForceEnglishOutput `
-        -Version $packageVersion `
+        -Version $($versionInfo.PackageVersion) `
         -BasePath "$worktreeRoot\bin\ProcessPipeline\AnyCPU\Release" `
         -OutputDirectory "$worktreeRoot\bin\nupkg" `
-        -Properties commitHash=$commitHash `
+        -Properties commitHash=$($versionInfo.CommitHash) `
         "$worktreeRoot\build\nuspec\Asmichi.ProcessPipeline.nuspec"
 }

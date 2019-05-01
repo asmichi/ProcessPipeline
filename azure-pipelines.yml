@@ -17,12 +17,11 @@ pr:
 
 variables:
   SolutionFile: 'src/ProcessPipeline.sln'
-  CommonBuildOptions: '-nologo --verbosity:quiet -p:Platform=AnyCPU --configuration Release'
 
 jobs:
 - job: build
 
-  # vs2017 because the job needs .NET Framework SDK 4.6.1 and 4.7.1.
+  # vs2017 because the job needs .NET Framework SDK 4.7.1.
   pool:
     vmImage: 'vs2017-win2016'
 
@@ -33,11 +32,12 @@ jobs:
       targetType: 'filePath'
       failOnStderr: true
       filePath: '$(Build.SourcesDirectory)/build/SetAzurePipelineVariables.ps1'
+      arguments: '-CommitHash $(Build.SourceVersion) -BranchName $(Build.SourceBranchName)'
 
   - task: DotNetCoreInstaller@0
-    displayName: 'Use .NET Core sdk 2.2.104'
+    displayName: 'Use .NET Core sdk 2.2.106'
     inputs:
-      version: 2.2.104
+      version: 2.2.106
 
   - task: DotNetCoreCLI@2
     displayName: 'dotnet restore'
@@ -60,9 +60,9 @@ jobs:
       arguments: '$(CommonBuildOptions)'
 
   - task: NuGetToolInstaller@0
-    displayName: 'Use NuGet 4.9.2'
+    displayName: 'Use NuGet 4.9.4'
     inputs:
-      versionSpec: 4.9.2
+      versionSpec: 4.9.4
 
   - task: NuGetCommand@2
     displayName: 'NuGet custom'
