@@ -95,8 +95,10 @@ namespace Asmichi.Utilities.ProcessManagement
             {
                 Assert.False(sut.WaitForExit(0));
                 Assert.False(sut.WaitForExit(1));
+
                 sut.StandardInput.Close();
-                sut.WaitForExit();
+                sut.WaitHandle.WaitOne();
+
                 Assert.True(sut.WaitForExit(0));
             }
         }
@@ -110,7 +112,9 @@ namespace Asmichi.Utilities.ProcessManagement
                 Assert.False(await sut.WaitForExitAsync(1));
 
                 sut.StandardInput.Close();
-                Assert.True(await sut.WaitForExitAsync(1000));
+                sut.WaitHandle.WaitOne();
+
+                Assert.True(await sut.WaitForExitAsync(0));
             }
         }
 
