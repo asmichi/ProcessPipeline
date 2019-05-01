@@ -30,25 +30,6 @@ namespace Asmichi.Utilities.ProcessManagement
             }
         }
 
-        [Fact]
-        public void ProcessPipelineWaitForAsyncIsTrulyAsynchronous()
-        {
-            var si = new ProcessPipelineStartInfo()
-            {
-                StdOutputRedirection = OutputRedirection.NullDevice,
-                StdErrorRedirection = OutputRedirection.NullDevice,
-            };
-            si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "Sleep", "1000");
-            si.Add(TestUtil.DotnetCommand, TestUtil.TestChildPath, "Sleep", "1000");
-
-            using (var sut = ProcessPipeline.Start(si))
-            {
-                WaitForAsyncIsTrulyAsynchronous(sut);
-                sut.WaitForExit();
-                Assert.True(sut.IsSuccessful);
-            }
-        }
-
         private static void WaitForAsyncIsTrulyAsynchronous(IChildProcess sut)
         {
             var sw = Stopwatch.StartNew();

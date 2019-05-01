@@ -22,9 +22,6 @@ namespace Asmichi.Utilities
             WriteHeader(nameof(RedirectionToFileAsync));
             await RedirectionToFileAsync();
 
-            WriteHeader(nameof(PipelineAsync));
-            await PipelineAsync();
-
             WriteHeader(nameof(WaitForExitAsync));
             await WaitForExitAsync();
         }
@@ -69,27 +66,6 @@ namespace Asmichi.Utilities
             }
 
             // ALLUSERSPROFILE=C:\ProgramData
-            // ...
-            Console.WriteLine(File.ReadAllText("env.txt"));
-        }
-
-        private static async Task PipelineAsync()
-        {
-            var si = new ProcessPipelineStartInfo()
-            {
-                StdOutputRedirection = OutputRedirection.File,
-                StdOutputFile = "env.txt",
-            };
-            si.Add("cmd", "/C", "set");
-            si.Add("findstr", "PROCESSOR");
-
-            using (var p = ProcessPipeline.Start(si))
-            {
-                await p.WaitForExitAsync();
-            }
-
-            // NUMBER_OF_PROCESSORS=16
-            // PROCESSOR_ARCHITECTURE = AMD64
             // ...
             Console.WriteLine(File.ReadAllText("env.txt"));
         }

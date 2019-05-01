@@ -68,14 +68,14 @@ namespace Asmichi.Utilities.ProcessManagement
         public Stream StandardInput => _standardInput;
 
         /// <summary>
-        /// If created with <see cref="ChildProcessStartInfo.StdOutputRedirection"/> and/or <see cref="ProcessPipelineStartInfo.StdErrorRedirection"/>
+        /// If created with <see cref="ChildProcessStartInfo.StdOutputRedirection"/> and/or <see cref="ChildProcessStartInfo.StdErrorRedirection"/>
         /// set to <see cref="OutputRedirection.OutputPipe"/>, a stream assosiated to that pipe.
         /// Otherwise null.
         /// </summary>
         public Stream StandardOutput => _standardOutput;
 
         /// <summary>
-        /// If created with <see cref="ChildProcessStartInfo.StdOutputRedirection"/> and/or <see cref="ProcessPipelineStartInfo.StdErrorRedirection"/>
+        /// If created with <see cref="ChildProcessStartInfo.StdOutputRedirection"/> and/or <see cref="ChildProcessStartInfo.StdErrorRedirection"/>
         /// set to <see cref="OutputRedirection.ErrorPipe"/>, a stream assosiated to that pipe.
         /// Otherwise null.
         /// </summary>
